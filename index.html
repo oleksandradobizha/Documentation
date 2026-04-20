@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Buildee QA Automation Framework — Playwright + TypeScript. Comprehensive documentation and FAQ." />
+  <title>Buildee QA · Playwright Documentation 2026</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Top navigation -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <button class="icon-btn menu-btn" id="menuBtn" aria-label="Toggle sidebar">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+
+      <a class="brand" href="#top">
+        <div class="brand-logo">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">Buildee QA</span>
+          <span class="brand-sub">Playwright Automation Framework</span>
+        </div>
+      </a>
+
+      <div class="doc-switch" role="tablist" aria-label="Document switcher">
+        <button class="doc-tab active" data-doc="playwright" role="tab" aria-selected="true">Playwright Automation</button>
+        <button class="doc-tab" data-doc="qa" role="tab" aria-selected="false">QA Process</button>
+      </div>
+
+      <div class="topbar-right">
+        <div class="search">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input id="searchInput" type="search" placeholder="Search the docs…" autocomplete="off" />
+          <kbd>⌘K</kbd>
+        </div>
+
+        <button class="icon-btn" id="themeToggle" aria-label="Toggle theme">
+          <svg class="sun" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+          <svg class="moon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+
+        <a class="gh-link icon-btn" href="https://github.com/simuwatt/automation-qa" target="_blank" rel="noreferrer" aria-label="GitHub repo">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.57.1.78-.25.78-.55v-2c-3.2.7-3.88-1.36-3.88-1.36-.52-1.33-1.27-1.68-1.27-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.68 1.24 3.33.95.1-.74.4-1.25.73-1.54-2.55-.29-5.23-1.28-5.23-5.69 0-1.26.45-2.29 1.19-3.1-.12-.3-.52-1.48.11-3.08 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.6.23 2.78.11 3.08.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.4-5.25 5.68.41.36.78 1.07.78 2.16v3.2c0 .31.2.66.79.55A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <div class="layout">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar" aria-label="Page navigation">
+      <nav class="toc" id="toc"></nav>
+    </aside>
+
+    <!-- Main content -->
+    <main class="content" id="content">
+      <!-- =============== PLAYWRIGHT AUTOMATION =============== -->
+      <article class="doc" id="doc-playwright">
+        <section id="top" class="hero">
+          <div class="hero-badges">
+            <span class="badge">Playwright</span>
+            <span class="badge">TypeScript</span>
+            <span class="badge">GitHub Actions</span>
+            <span class="badge">TestRail</span>
+            <span class="badge">Slack</span>
+          </div>
+          <h1>Playwright Automation Framework</h1>
+          <p class="lead">
+            End-to-end test automation for the <strong>Buildee</strong> web application — a building energy management platform.
+            Built with <strong>Playwright</strong> and <strong>TypeScript</strong>, following the Page Object Model.
+          </p>
+
+          <div class="quick-cards">
+            <div class="qcard"><span class="qcard-label">Default environment</span><span class="qcard-value">Staging</span></div>
+            <div class="qcard"><span class="qcard-label">Base URL</span><span class="qcard-value mono">staging.buildee.com</span></div>
+            <div class="qcard"><span class="qcard-label">Repository</span><span class="qcard-value mono"><a href="https://github.com/simuwatt/automation-qa" target="_blank" rel="noreferrer">simuwatt/automation-qa</a></span></div>
+            <div class="qcard"><span class="qcard-label">Notifications</span><span class="qcard-value">Slack</span></div>
+          </div>
+
+          <div class="callout info">
+            <strong>Before running:</strong> some data setup is required — see <a href="#test-data">Test Data</a>.
+            Coverage is tracked in
+            <a href="https://docs.google.com/spreadsheets/d/1anbxUP4jlNOAcWgBIPhw1PFw2Oqa8FiNDbMDzujGtO4/edit?gid=121909315#gid=121909315" target="_blank" rel="noreferrer">this matrix</a>.
+          </div>
+        </section>
+
+        <section id="overview">
+          <h2>Overview</h2>
+          <p>
+            The framework is modular with reusable components for pages, utilities, and test cases.
+            It covers login flows, building management, equipment CRUD, utility data entry/import, measures,
+            proposals, projects, reports, and task lists — and integrates with <strong>TestRail</strong> and <strong>Slack</strong>.
+          </p>
+        </section>
+
+        <section id="tech-stack">
+          <h2>Tech Stack</h2>
+          <div class="tech-grid">
+            <div class="tech-card"><h4>Playwright</h4><p>E2E browser automation</p></div>
+            <div class="tech-card"><h4>TypeScript</h4><p>Strongly-typed test code</p></div>
+            <div class="tech-card"><h4>Node.js</h4><p>LTS runtime</p></div>
+            <div class="tech-card"><h4>dotenv</h4><p>Env-based configuration</p></div>
+            <div class="tech-card"><h4>GitHub Actions</h4><p>Scheduled CI pipelines</p></div>
+            <div class="tech-card"><h4>TestRail</h4><p>Test management &amp; reporting</p></div>
+            <div class="tech-card"><h4>Slack</h4><p>CI notifications</p></div>
+            <div class="tech-card"><h4>ESLint &amp; Prettier</h4><p>Code quality</p></div>
+          </div>
+        </section>
+
+        <section id="project-structure">
+          <h2>Project Structure</h2>
+          <p>The repository is organized to cleanly separate pages, tests, data, utilities, workflows, and scripts:</p>
+<pre class="code"><code>automation-qa/
+├── .github/
+│   ├── workflows/
+│   │   ├── prod.yml                  # Production smoke tests (scheduled)
+│   │   └── staging.yml               # Staging full regression (scheduled)
+│   └── scripts/
+│       ├── parse_junit_results.sh    # Extract results from JUnit XML
+│       ├── send_slack_notification_prod.sh
+│       ├── send_slack_notification_staging.sh
+│       └── report_testrail_results.js # TestRail integration
+├── data/
+│   ├── auth.config.ts                # Auth user definitions
+│   ├── buildings.data.ts             # Building/construction test data
+│   ├── measures.data.ts              # Measures test data &amp; column definitions
+│   ├── json/
+│   │   ├── testData.json             # Primary test data (orgs, buildings, equipment)
+│   │   ├── newBuilding.json          # New building creation payload
+│   │   ├── fifthRoyalOakData.json    # Fifth Royal Oak building data
+│   │   ├── propertyObjectModel.json  # Property field definitions per building type
+│   │   ├── expectedUtilitiesValues.json
+│   │   ├── utilities.json
+│   │   └── equipment/                # Equipment definitions (heating, cooling, etc.)
+│   ├── csv/
+│   │   ├── expectedHeaders.csv       # Expected CSV export headers
+│   │   ├── expectedHeaders2.csv
+│   │   ├── buildeeUtilityElectricity.csv
+│   │   └── buildeeUtilityWaterAndGas.csv
+│   └── images/                       # Test image assets
+├── pages/                            # Page Object Model (POM)
+│   ├── base/
+│   │   ├── BasePage.ts               # Base page with reusable methods
+│   │   └── PortfolioTable.ts         # Shared table interactions
+│   ├── common.page.ts                # Re-auth &amp; navigation helpers
+│   ├── Home/                         # LoginPage, HomePage, DashboardPage
+│   ├── Headers/                      # Header, PanelFilter
+│   ├── Buildings/                    # BuildingsPortfolio, BuildingPage, tabs, etc.
+│   ├── Equipment/                    # EquipmentForm
+│   ├── Measures/                     # MeasuresForm, MeasuresPortfolio
+│   ├── Proposals/                    # ProposalsForm, ProposalsPortfolio
+│   ├── Reports/                      # ReportsModal, EmailFileModal
+│   └── Orgs/                         # OrganizationsDashboard, TaskLists
+├── tests/
+│   ├── auth.setup.ts                 # Authentication setup (runs before all tests)
+│   ├── base/baseTest.ts              # Extended fixtures &amp; hooks
+│   ├── login/                        # Login test specs
+│   └── e2e/                          # End-to-end test specs
+├── utils/
+│   ├── authHelper.ts                 # Login and session storage
+│   ├── NavigationHelper.ts           # App navigation helpers
+│   ├── FileUtils.ts                  # File download &amp; validation (CSV, PDF, DOCX)
+│   ├── calculationsHelper.ts         # Value comparison utilities
+│   ├── objectModelHelper.ts          # Property field validation
+│   ├── playwrightHelper.ts           # Retry wrapper for flaky operations
+│   └── globalSetup.ts                # Env-based dotenv loader
+├── playwright/.auth/                 # Stored authentication state (gitignored)
+├── test-results/                     # JUnit XML reports &amp; screenshots
+├── playwright-report/                # HTML test reports
+├── playwright.config.ts
+├── package.json
+├── .env.example                      # Environment variable template
+└── .gitignore</code></pre>
+        </section>
+
+        <section id="getting-started">
+          <h2>Getting Started</h2>
+
+          <h3 id="prerequisites">Prerequisites</h3>
+          <ul>
+            <li>Node.js (LTS, v16+)</li>
+            <li>npm (comes with Node.js)</li>
+            <li>Access to the Buildee application (staging or production URL)</li>
+            <li>Valid Buildee user credentials</li>
+          </ul>
+
+          <h3 id="installation">Installation</h3>
+<pre class="code" data-lang="bash"><code># Clone the repository
+git clone https://github.com/simuwatt/automation-qa.git
+cd automation-qa
+
+# Install dependencies
+npm install
+
+# Install Playwright browsers
+npx playwright install</code></pre>
+
+          <h3 id="env-setup">Environment Setup</h3>
+          <p>Copy the template and fill in credentials:</p>
+<pre class="code" data-lang="bash"><code>cp .env.example .env.qa</code></pre>
+<pre class="code" data-lang="ini"><code>BASE_URL = https://&lt;your-buildee-environment-url&gt;
+USERNAME = &lt;display name shown in the app header&gt;
+USEREMAIL = &lt;login email&gt;
+PASSWORD = &lt;login password&gt;</code></pre>
+        </section>
+
+        <section id="environment">
+          <h2>Environment &amp; Credentials</h2>
+          <p>
+            The framework supports multiple environments through dotenv files.
+            <code>globalSetup.ts</code> loads the correct <code>.env</code> file based on the <code>test_env</code> variable.
+          </p>
+
+          <h3 id="env-files">Dotenv Files</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>File</th><th>When used</th></tr></thead>
+              <tbody>
+                <tr><td><code>.env</code></td><td>Default — used by the Playwright VSCode extension (no dynamic switching)</td></tr>
+                <tr><td><code>.env.qa</code></td><td>Local QA runs via npm scripts (<code>test_env=qa</code>)</td></tr>
+                <tr><td><code>.env.staging</code></td><td>Staging runs (<code>test_env=staging</code>)</td></tr>
+                <tr><td><code>.env.prod</code></td><td>Production smoke runs (<code>test_env=prod</code>)</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout warn">
+            <strong>Important:</strong> all <code>.env</code> files are <em>gitignored</em> and must never be committed with credentials.
+          </div>
+
+          <h3 id="env-vars">Environment Variables</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Variable</th><th>Description</th></tr></thead>
+              <tbody>
+                <tr><td><code>BASE_URL</code></td><td>The Buildee environment URL</td></tr>
+                <tr><td><code>USERNAME</code></td><td>Display name shown in the app header</td></tr>
+                <tr><td><code>USEREMAIL</code></td><td>Login email</td></tr>
+                <tr><td><code>PASSWORD</code></td><td>Login password</td></tr>
+                <tr><td><code>test_env</code></td><td>Env selector: <code>qa</code>, <code>staging</code>, <code>prod</code></td></tr>
+                <tr><td colspan="2" class="muted"><em>TestRail (optional):</em> <code>TESTRAIL_URL</code>, <code>TESTRAIL_USERNAME</code>, <code>TESTRAIL_API_KEY</code>, <code>TESTRAIL_PROJECT_ID</code>, <code>TESTRAIL_SECTION_ID</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3 id="credentials-matrix">How Credentials Are Loaded</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Scenario</th><th>Source</th></tr></thead>
+              <tbody>
+                <tr><td>Local · Playwright VSCode extension</td><td>Root <code>.env</code> file only</td></tr>
+                <tr><td>Local · npm script</td><td><code>.env.[env]</code> selected by <code>test_env</code></td></tr>
+                <tr><td>CI (GitHub Actions)</td><td><a href="https://github.com/simuwatt/automation-qa/settings/secrets/actions" target="_blank" rel="noreferrer">GitHub Secrets</a> — no <code>.env</code> files</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3 id="auth-flow">Authentication Flow</h3>
+          <ol class="timeline">
+            <li><strong>Pre-test setup</strong> — <code>tests/auth.setup.ts</code> authenticates once and saves the session to <code>playwright/.auth/user.json</code>.</li>
+            <li><strong>Session reuse</strong> — all chromium tests load the saved session, skipping login.</li>
+            <li><strong>Login tests</strong> — run in a separate project without stored state to exercise the real login flow.</li>
+            <li><strong>Re-authentication</strong> — <code>reAuthenticateIfNeeded()</code> in <code>common.page.ts</code> handles expired sessions automatically.</li>
+          </ol>
+
+          <h3 id="gha-secrets">GitHub Actions Secrets</h3>
+          <p>Configure these under <em>Settings → Secrets and variables → Actions</em>:</p>
+          <div class="pill-grid">
+            <span class="pill">BASE_URL</span>
+            <span class="pill">BASE_URL_PROD</span>
+            <span class="pill">USERNAME</span>
+            <span class="pill">USEREMAIL</span>
+            <span class="pill">PASSWORD</span>
+            <span class="pill">SLACK_WEBHOOK_URL</span>
+            <span class="pill">USEREMAIL_TESTRAIL</span>
+            <span class="pill">TRCLI_KEY</span>
+          </div>
+        </section>
+
+        <section id="running-tests">
+          <h2>Running Tests</h2>
+
+          <h3 id="npm-scripts">NPM Scripts</h3>
+          <p>Predefined scripts use <code>cross-env</code> to inject <code>test_env</code> (which determines the loaded <code>.env.[env]</code> file):</p>
+<pre class="code" data-lang="bash"><code># Run QA tests (default)
+npm run env-qa
+
+# Headed mode (browser visible)
+npm run env-qa-headed
+
+# Filter by tag (via grep)
+npm run env-qa-tag
+
+# Run a specific spec file
+npm run env-qa addProposal.spec.ts</code></pre>
+
+          <h3 id="cli-examples">Playwright CLI Examples</h3>
+<pre class="code" data-lang="bash"><code># Run all tests
+npx playwright test
+
+# Run a specific spec
+npx playwright test tests/e2e/Buildings/buildingsManagement.spec.ts
+
+# Run by tag
+npx playwright test --grep "@smoke_prod"
+
+# Run everything except smoke production
+npx playwright test --grep-invert "@smoke_prod"
+
+# Headed + specific project
+npx playwright test --headed --project=chromium
+
+# Target a custom environment
+test_env=staging npx playwright test
+
+# Open the HTML report after a run
+npx playwright show-report</code></pre>
+
+          <h3 id="vscode">VSCode Playwright Extension</h3>
+          <p>You can also run or debug tests directly from the Playwright extension. It always uses the root <code>.env</code> file (no dynamic env switching).</p>
+        </section>
+
+        <section id="architecture">
+          <h2>Test Architecture</h2>
+
+          <h3 id="playwright-config">Playwright Configuration</h3>
+          <ul>
+            <li>Parallel execution with configurable workers</li>
+            <li>Retries enabled in CI (3 for production smoke)</li>
+            <li>JUnit XML + HTML reporters</li>
+            <li>Chromium project (+ separate <em>Login tests</em> project without stored state)</li>
+            <li>Optional <code>trace: "retain-on-failure"</code> for debugging</li>
+          </ul>
+
+          <h3 id="projects">Playwright Projects</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Project</th><th>Purpose</th></tr></thead>
+              <tbody>
+                <tr><td><strong>setup</strong></td><td>Runs <code>auth.setup.ts</code>, saves session state</td></tr>
+                <tr><td><strong>chromium</strong></td><td>All E2E tests, reuses saved session</td></tr>
+                <tr><td><strong>Login tests</strong></td><td>Login-specific specs without stored state</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3 id="fixtures">Base Test Fixtures <span class="muted">(baseTest.ts)</span></h3>
+          <p>Every test imports <code>test</code> from <code>baseTest.ts</code>, which extends Playwright's built-in test with pre-instantiated page objects, helpers, and shared test data.</p>
+
+          <div class="callout info">
+            <strong><code>testData</code> fixture:</strong> common data is loaded from <code>testData.json</code> so tests don't hardcode values.
+            Instead of <code>selectBuilding("Fifth Royal")</code>, use <code>selectBuilding(testData.testBuilding)</code>. Tests that need
+            different data should load their own JSON/CSV file at the start.
+          </div>
+
+          <h4>Page Objects</h4>
+          <div class="pill-grid">
+            <span class="pill">loginPage</span><span class="pill">homePage</span><span class="pill">header</span>
+            <span class="pill">dashboard</span><span class="pill">buildingsPortfolio</span><span class="pill">buildingPage</span>
+            <span class="pill">overviewTab</span><span class="pill">panelFilter</span><span class="pill">utilitiesTab</span>
+            <span class="pill">portfolioTable</span><span class="pill">projectsTab</span><span class="pill">newMeasure</span>
+            <span class="pill">newBuildingPage</span><span class="pill">measuresPortfolio</span><span class="pill">proposalsPortfolio</span>
+            <span class="pill">proposalsForm</span><span class="pill">reportsModal</span><span class="pill">emailFileModal</span>
+            <span class="pill">assetsTab</span><span class="pill">assetsPortfolio</span><span class="pill">equipmentForm</span>
+            <span class="pill">locationForm</span><span class="pill">organizationsDashboard</span><span class="pill">taskLists</span>
+            <span class="pill">propertyPage</span>
+          </div>
+          <h4>Helpers &amp; Data</h4>
+          <div class="pill-grid">
+            <span class="pill helper">authHelper</span>
+            <span class="pill helper">navigationHelper</span>
+            <span class="pill data">testData <small>(testData.json)</small></span>
+          </div>
+
+          <h3 id="lifecycle">Lifecycle Hooks</h3>
+          <ul>
+            <li><code>beforeAll</code> — global setup, loads correct <code>.env</code></li>
+            <li><code>beforeEach</code> — ensures a fresh app state / re-auth if needed</li>
+            <li><code>afterEach</code> — captures screenshots and traces on failure</li>
+            <li><code>afterAll</code> — cleans up test artifacts</li>
+          </ul>
+        </section>
+
+        <section id="pom">
+          <h2>Page Object Model</h2>
+          <p>The framework follows a base-class hierarchy. All page objects extend <code>BasePage</code>, list/table views extend <code>PortfolioTable</code>.</p>
+
+          <h3 id="base-page">BasePage</h3>
+          <p>Root class with reusable UI interaction methods:</p>
+          <ul class="method-list">
+            <li><code>clickElementWithText(locator, text)</code> — Click an element matching text</li>
+            <li><code>clickElementWithJS(locator)</code> — Click using JavaScript (for hidden elements)</li>
+            <li><code>elementContainsText(locator, text, exact)</code> — Assert text content</li>
+            <li><code>findElementByName(name)</code> — Locate element by name attribute</li>
+            <li><code>toggleSwitchBox(locator)</code> — Toggle a switch/checkbox</li>
+            <li><code>dragAndDropElements(source, target)</code> — Drag-and-drop interaction</li>
+          </ul>
+
+          <h3 id="portfolio-table">PortfolioTable</h3>
+          <p>Shared class for interacting with list/table views (portfolios) across the app:</p>
+          <ul class="method-list">
+            <li><code>clickItem(name)</code> — Click a row by item name</li>
+            <li><code>verifyItemIsPresent(name)</code> — Assert an item exists in the table</li>
+            <li><code>verifyItemsArePresent(names[])</code> — Assert multiple items exist</li>
+            <li><code>verifyTotalCount(count)</code> — Verify the displayed total</li>
+            <li><code>clickExtrasButton(name)</code> — Click the extras/action button for an item</li>
+            <li><code>waitForTableToLoad()</code> — Wait until the table finishes loading</li>
+          </ul>
+
+          <h3 id="page-inventory">Page Object Inventory</h3>
+          <div class="tech-grid four">
+            <div class="tech-card"><h4>Home</h4><p>LoginPage, HomePage, DashboardPage</p></div>
+            <div class="tech-card"><h4>Headers</h4><p>Header, PanelFilter</p></div>
+            <div class="tech-card"><h4>Buildings</h4><p>BuildingsPortfolio, BuildingPage, BuildingForm, OverviewTab, UtilitiesTab, ProjectsTab, AssetsTab, AssetsPortfolio, PropertyPage, LocationForm</p></div>
+            <div class="tech-card"><h4>Equipment</h4><p>EquipmentForm</p></div>
+            <div class="tech-card"><h4>Measures</h4><p>MeasuresForm, MeasuresPortfolio</p></div>
+            <div class="tech-card"><h4>Proposals</h4><p>ProposalsForm, ProposalsPortfolio</p></div>
+            <div class="tech-card"><h4>Reports</h4><p>ReportsModal, EmailFileModal</p></div>
+            <div class="tech-card"><h4>Orgs</h4><p>OrganizationsDashboard, TaskLists</p></div>
+          </div>
+        </section>
+
+        <section id="test-data">
+          <h2>Test Data</h2>
+          <p>Tests rely on pre-existing data in the target environment. Buildings &amp; core entities <strong>should not be modified manually</strong>.</p>
+
+          <h3 id="required-entities">Required Entities</h3>
+          <div class="tech-grid">
+            <div class="tech-card"><h4>Organizations</h4><p>The shared account must have access to all test orgs.</p></div>
+            <div class="tech-card"><h4>Buildings</h4><p>Fifth Royal Oak + core properties used across specs.</p></div>
+            <div class="tech-card"><h4>Measures &amp; Proposals</h4><p>Pre-existing records referenced by measure &amp; report specs.</p></div>
+            <div class="tech-card"><h4>Equipment</h4><p>Created/deleted by tests. Types: VAV, Heating, Cooling, Controls, DOAS, Lighting, Pumps, Fans.</p></div>
+          </div>
+
+          <h3 id="data-files">Data Files</h3>
+          <ul class="method-list">
+            <li><code>data/json/testData.json</code> — Primary shared test data</li>
+            <li><code>data/json/equipment/*.json</code> — Equipment field definitions per type</li>
+            <li><code>data/csv/buildeeUtilityElectricity.csv</code> · <code>buildeeUtilityWaterAndGas.csv</code> — Utility imports</li>
+            <li><code>data/csv/expectedHeaders.csv</code> · <code>expectedHeaders2.csv</code> — Expected CSV export headers</li>
+          </ul>
+        </section>
+
+        <section id="cicd">
+          <h2>CI/CD Pipeline</h2>
+          <p>Tests run in GitHub Actions using official <em>Microsoft Playwright Docker images</em>. Both workflows also support manual <code>workflow_dispatch</code>.</p>
+
+          <h3 id="prod-pipeline">Production Smoke <span class="muted">(prod.yml)</span></h3>
+          <div class="pipeline-card prod">
+            <div class="pipe-row"><span class="pipe-label">Schedule</span><code>0 13-23/3,0 * * 1-5</code><small>(every 3 hours · US business hours · weekdays)</small></div>
+            <div class="pipe-row"><span class="pipe-label">Filter</span><code>--grep "@smoke_prod"</code></div>
+            <div class="pipe-row"><span class="pipe-label">Base URL</span><code>secrets.BASE_URL_PROD</code></div>
+            <div class="pipe-row"><span class="pipe-label">Retries</span><code>3</code></div>
+            <div class="pipe-row"><span class="pipe-label">Steps</span>Install deps → Run smoke → Upload report → Parse JUnit → Slack on failure</div>
+          </div>
+
+          <h3 id="staging-pipeline">Staging Regression <span class="muted">(staging.yml)</span></h3>
+          <div class="pipeline-card staging">
+            <div class="pipe-row"><span class="pipe-label">Schedule</span><code>0 0 * * 1,3,5</code><small>(Mon/Wed/Fri · midnight UTC)</small></div>
+            <div class="pipe-row"><span class="pipe-label">Filter</span><code>--grep-invert @smoke_prod</code></div>
+            <div class="pipe-row"><span class="pipe-label">Base URL</span><code>secrets.BASE_URL</code></div>
+            <div class="pipe-row"><span class="pipe-label">Steps</span>Install deps → Run non-smoke → Upload report → Parse JUnit → Slack</div>
+            <div class="pipe-row"><span class="pipe-label">TestRail</span>Present but currently commented out</div>
+          </div>
+
+          <h3 id="ci-scripts">CI Scripts</h3>
+          <ul class="method-list">
+            <li><code>parse_junit_results.sh</code> — Extracts pass/fail counts &amp; failing test names from <code>junit-report.xml</code></li>
+            <li><code>send_slack_notification_prod.sh</code> / <code>send_slack_notification_staging.sh</code> — Post results to the Slack webhook</li>
+            <li><code>report_testrail_results.js</code> — Reports results to TestRail, creates test cases on-demand, uploads failure screenshots</li>
+          </ul>
+
+          <h3 id="slack">Slack Notifications</h3>
+          <p>Both pipelines send notifications via webhook. Each includes total / passed / failed counts, failing test names, and a link to the GitHub Actions run.</p>
+        </section>
+
+        <section id="reporting">
+          <h2>Reporting &amp; TestRail</h2>
+
+          <h3 id="report-types">Report Types</h3>
+          <div class="tech-grid">
+            <div class="tech-card"><h4>HTML Report</h4><p>Rich Playwright report with traces &amp; screenshots</p></div>
+            <div class="tech-card"><h4>JUnit XML</h4><p>Machine-readable, used by CI &amp; Slack notifier</p></div>
+            <div class="tech-card"><h4>Screenshots</h4><p>Captured on failure in <code>test-results/</code></p></div>
+            <div class="tech-card"><h4>Traces</h4><p>Optional <code>retain-on-failure</code> traces</p></div>
+          </div>
+
+          <h3 id="testrail">TestRail Integration</h3>
+          <p>The TestRail reporter (<code>.github/scripts/report_testrail_results.js</code>):</p>
+          <ul>
+            <li>Creates test runs in TestRail</li>
+            <li>Maps results using case IDs embedded in test titles (e.g. <code>C315</code>, <code>C1784</code>)</li>
+            <li>Creates missing test cases on-the-fly (fallback — not ideal for traceability)</li>
+            <li>Attaches failure screenshots to test results</li>
+          </ul>
+          <div class="callout info">
+            Currently disabled in CI (commented out). To re-enable, uncomment the relevant steps in <code>staging.yml</code> and configure the TestRail secrets.
+          </div>
+        </section>
+
+        <section id="tags">
+          <h2>Tags &amp; Test Filtering</h2>
+          <p>Tests use tags for selective execution. By default, everything without a specific tag is treated as regression. TestRail case IDs in test titles (e.g. <code>C590 C591 C594</code>) link tests to TestRail cases.</p>
+          <div class="pill-grid">
+            <span class="pill tag">@smoke_prod</span>
+            <span class="pill tag">@login</span>
+            <span class="pill tag">@regression</span>
+          </div>
+        </section>
+
+        <section id="utilities">
+          <h2>Utility Modules</h2>
+
+          <h3 id="authhelper">AuthHelper <span class="muted">(utils/authHelper.ts)</span></h3>
+          <ul class="method-list">
+            <li><code>authenticateUser(username, password)</code> — Logs in via the browser UI</li>
+            <li><code>saveAuthenticationState(filePath)</code> — Saves cookies/storage to a JSON file</li>
+          </ul>
+
+          <h3 id="navhelper">NavigationHelper <span class="muted">(utils/NavigationHelper.ts)</span></h3>
+          <ul class="method-list">
+            <li><code>navigateToBuilding(org, building)</code> — Select org and open a building</li>
+            <li><code>goToBuilding(building)</code> — Navigate directly to a building</li>
+            <li><code>navigateToSection(section)</code> — Navigate to a top-level section</li>
+            <li><code>navigateToBuildingTab(tab)</code> — Switch between building tabs</li>
+            <li><code>navigateToAssetsSubTab(subTab)</code> — Navigate within the Assets tab</li>
+          </ul>
+
+          <h3 id="fileutils">FileUtils <span class="muted">(utils/FileUtils.ts)</span></h3>
+          <ul class="method-list">
+            <li><code>readJsonData(path)</code> — Parse a JSON file</li>
+            <li><code>downloadAndSave(download, fileName)</code> — Save a downloaded file</li>
+            <li><code>getExpectedHeadersFromCSV(path)</code> / <code>validateCSVHeaders(filePath, expected)</code> — CSV header validation</li>
+            <li><code>validatePdf(filePath, expectedText)</code> / <code>validateDocx(filePath, expectedText)</code> — Content validation</li>
+            <li><code>validateDownload(download)</code> — General download validation</li>
+          </ul>
+
+          <h3 id="other-helpers">Other Helpers</h3>
+          <ul class="method-list">
+            <li><code>playwrightHelper.withRetry(fn, retries)</code> — Retry wrapper for transient failures (page crashes, timeouts)</li>
+            <li><code>calculationsHelper.compareValue(actual, expected, tolerance)</code> — Numeric comparison with tolerance</li>
+            <li><code>objectModelHelper.validateField(page, fieldDef)</code> — Validate a property field against its definition</li>
+          </ul>
+        </section>
+
+        <section id="test-inventory">
+          <h2>Test Inventory</h2>
+          <div class="tech-grid">
+            <div class="tech-card"><h4>Login Tests</h4><p><code>tests/login/</code> — exercise the real login flow (no stored state)</p></div>
+            <div class="tech-card"><h4>Smoke Tests</h4><p><code>tests/e2e/smokeProd.spec.ts</code> — tagged <code>@smoke_prod</code>. Navigates through major tabs and downloads a report.</p></div>
+            <div class="tech-card"><h4>Buildings</h4><p><code>tests/e2e/Buildings/</code> + per-tab subfolders (Assets, Overview, Projects, Property, Utilities)</p></div>
+            <div class="tech-card"><h4>Measures</h4><p><code>tests/e2e/Measures/</code> — CRUD &amp; calculations</p></div>
+            <div class="tech-card"><h4>Projects &amp; Proposals</h4><p><code>tests/e2e/Projects/</code>, <code>tests/e2e/Proposals/</code></p></div>
+            <div class="tech-card"><h4>Tasks</h4><p><code>tests/e2e/Tasks/</code> — task lists</p></div>
+          </div>
+        </section>
+
+        <section id="extending">
+          <h2>Extending the Framework</h2>
+          <h3 id="new-page">Add a New Page</h3>
+          <ol>
+            <li>Create a file in <code>pages/</code> (e.g. <code>pages/NewPage.ts</code>).</li>
+            <li>Extend <code>BasePage</code> and define locators and methods.</li>
+            <li>Extend <code>PortfolioTable</code> if the page uses a table view.</li>
+          </ol>
+          <h3 id="new-test">Add a New Test</h3>
+          <ol>
+            <li>Create a spec in <code>tests/e2e/</code> (e.g. <code>tests/e2e/newTest.spec.ts</code>).</li>
+            <li>Import <code>test</code> from <code>baseTest.ts</code> and use the provided fixtures.</li>
+            <li>Place shared data in <code>testData.json</code>; use test-specific JSON/CSV only when necessary.</li>
+          </ol>
+        </section>
+
+        <section id="best-practices">
+          <h2>Best Practices</h2>
+          <ul class="best">
+            <li><strong>Use Page Objects</strong> — encapsulate UI interactions in page classes.</li>
+            <li><strong>Reuse components</strong> — use <code>PanelFilter</code>, <code>PortfolioTable</code>, and helpers for common interactions.</li>
+            <li><strong>Tag tests</strong> — use tags (e.g. <code>@smoke_prod</code>) to group and filter.</li>
+            <li><strong>Handle errors gracefully</strong> — guard flaky actions and empty states.</li>
+            <li><strong>Never push to <code>main</code></strong> — always branch and open a PR for review.</li>
+            <li><strong>Verify stability before merging</strong> — run locally and, if needed, trigger GHA from your branch. You can temporarily edit the <code>.yml</code> file to run just the test(s) you need, and comment Slack notifications to avoid spam.</li>
+          </ul>
+          <div class="callout info">
+            <strong>Note on session storage:</strong> reusing session storage is usually faster than logging in per test.
+            However, in this web app, restoring the session is slower on GHA, so manual login is used by default.
+            To re-enable, uncomment the setup dependency and <code>storage</code> lines in <code>playwright.config.ts</code>
+            and remove the login step from the <code>beforeEach</code> hook.
+          </div>
+        </section>
+
+        <section id="troubleshooting">
+          <h2>Troubleshooting</h2>
+
+          <h3 id="common-issues">Common Issues</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Issue</th><th>Resolution</th></tr></thead>
+              <tbody>
+                <tr><td>Missing records on first run</td><td>Ensure required orgs, buildings and measures exist — see <a href="#test-data">Test Data</a></td></tr>
+                <tr><td>Session expired mid-test</td><td>Handled automatically by <code>reAuthenticateIfNeeded()</code></td></tr>
+                <tr><td>Delete fails on huge tables</td><td>Filter or reset data manually before rerunning</td></tr>
+                <tr><td>Password ending in <code>#</code></td><td>Don't use it for the automation account — the test will fail</td></tr>
+                <tr><td>TestRail test run fails to create</td><td>A non-existent case ID was added to a test. Verify case IDs in titles exist in TestRail.</td></tr>
+                <tr><td>No Slack notifications</td><td>Ensure <code>SLACK_WEBHOOK_URL</code> matches the <a href="https://api.slack.com/apps/A08MG58170Q/incoming-webhooks" target="_blank" rel="noreferrer">incoming webhook</a></td></tr>
+                <tr><td>TestRail reporter errors</td><td>Verify <code>USEREMAIL_TESTRAIL</code> / <code>TRCLI_KEY</code> match your <a href="https://buildee.testrail.io/index.php?/mysettings" target="_blank" rel="noreferrer">TestRail settings</a></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3 id="debugging">Debugging Tips</h3>
+          <ul>
+            <li><strong>Headed mode:</strong> run with <code>--headed</code> to watch the browser</li>
+            <li><strong>Trace viewer:</strong> enable <code>trace: "retain-on-failure"</code> in <code>playwright.config.ts</code>, then <code>npx playwright show-trace</code></li>
+            <li><strong>Video replay:</strong> check <code>test-results/</code> for recorded videos of failed tests</li>
+            <li><strong>Pause on failure:</strong> add <code>await page.pause()</code> to open the Playwright Inspector</li>
+            <li><strong>Single test:</strong> <code>npx playwright test &lt;file&gt; -g "&lt;test name&gt;"</code></li>
+          </ul>
+
+          <h3 id="quality">Code Quality</h3>
+<pre class="code" data-lang="bash"><code># ESLint
+npx eslint .
+npx eslint . --fix
+
+# Prettier
+npx prettier . --check
+npx prettier . --write</code></pre>
+        </section>
+      </article>
+
+      <!-- =============== QA PROCESS =============== -->
+      <article class="doc hidden" id="doc-qa">
+        <section id="qa-top" class="hero">
+          <div class="hero-badges">
+            <span class="badge">QA Process</span>
+            <span class="badge">Onboarding</span>
+            <span class="badge">Jira</span>
+            <span class="badge">TestRail</span>
+          </div>
+          <h1>QA Process &amp; Onboarding Documentation</h1>
+          <p class="lead">
+            A complete guide to QA processes, onboarding steps, tools, environments, and responsibilities
+            within the <strong>buildee</strong> team.
+          </p>
+
+          <div class="quick-cards">
+            <div class="qcard"><span class="qcard-label">Production</span><span class="qcard-value mono">app.buildee.com</span></div>
+            <div class="qcard"><span class="qcard-label">Staging</span><span class="qcard-value mono">staging.buildee.com</span></div>
+            <div class="qcard"><span class="qcard-label">QA</span><span class="qcard-value mono">qa.buildee.com</span></div>
+            <div class="qcard"><span class="qcard-label">Default test env</span><span class="qcard-value">QA</span></div>
+          </div>
+        </section>
+
+        <section id="qa-overview">
+          <h2>1. Overview</h2>
+          <p>
+            This document provides a complete guide to QA processes, onboarding steps, tools, environments,
+            and responsibilities within the buildee team. Use it as your reference for day-to-day work and
+            as a checklist when onboarding new team members.
+          </p>
+        </section>
+
+        <section id="qa-onboarding">
+          <h2>2. QA Onboarding Guide</h2>
+
+          <h3 id="qa-welcome">2.1 Welcome</h3>
+          <div class="callout info">
+            <strong>Welcome to the buildee team!</strong> This guide will help you get started and provide
+            essential resources to begin working effectively as part of the QA team.
+          </div>
+
+          <h3 id="qa-getting-started">2.2 Getting Started</h3>
+          <p>To begin, complete the following steps:</p>
+
+          <ol class="timeline">
+            <li>
+              <strong>Request access to:</strong>
+              <div class="pill-grid" style="margin-top:8px">
+                <span class="pill">Jira</span>
+                <span class="pill">TestRail</span>
+                <span class="pill">Slack</span>
+                <span class="pill">Google Drive</span>
+              </div>
+            </li>
+            <li>
+              <strong>Get familiar with environments:</strong>
+              <div class="pill-grid" style="margin-top:8px">
+                <span class="pill data">QA</span>
+                <span class="pill data">Staging</span>
+                <span class="pill data">Production</span>
+              </div>
+            </li>
+            <li>
+              <strong>Review onboarding materials:</strong> the <em>QA &amp; Automation Guide</em> and the
+              <em>Playwright documentation</em>.
+            </li>
+            <li>
+              <strong>Join Slack channels</strong> and connect with your Manager for initial assignments and walkthroughs.
+            </li>
+            <li>
+              <strong>Install required tools</strong> based on your platform:
+              <div class="pill-grid" style="margin-top:8px">
+                <span class="pill helper">Postman</span>
+                <span class="pill helper">Android Studio</span>
+                <span class="pill helper">XCode</span>
+              </div>
+            </li>
+          </ol>
+        </section>
+
+        <section id="qa-links">
+          <h2>2.3 Important Links</h2>
+
+          <h3 id="qa-env-links">Environments</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Environment</th><th>URL</th><th>Purpose</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><strong>Production</strong></td>
+                  <td><a href="https://app.buildee.com/" target="_blank" rel="noreferrer">app.buildee.com</a></td>
+                  <td>Live user-facing environment</td>
+                </tr>
+                <tr>
+                  <td><strong>Staging</strong></td>
+                  <td><a href="https://staging.buildee.com/" target="_blank" rel="noreferrer">staging.buildee.com</a></td>
+                  <td>Pre-production validation · shares DB/users with prod · most stable, hosts automation runs</td>
+                </tr>
+                <tr>
+                  <td><strong>QA</strong></td>
+                  <td><a href="https://qa.buildee.com/" target="_blank" rel="noreferrer">qa.buildee.com</a></td>
+                  <td>Auto-deployed when code merges into the <code>develop</code> branch</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3 id="qa-resources">QA &amp; Automation Resources</h3>
+          <div class="tech-grid">
+            <div class="tech-card">
+              <h4>Playwright Automation Repo</h4>
+              <p><a href="https://github.com/simuwatt/automation-qa" target="_blank" rel="noreferrer">github.com/simuwatt/automation-qa</a></p>
+            </div>
+            <div class="tech-card">
+              <h4>Playwright Docs</h4>
+              <p><a href="https://playwright.dev/" target="_blank" rel="noreferrer">playwright.dev</a></p>
+            </div>
+            <div class="tech-card">
+              <h4>TestRail (Web App Project)</h4>
+              <p><a href="https://buildee.testrail.io/index.php?/projects/overview/4" target="_blank" rel="noreferrer">buildee.testrail.io</a></p>
+            </div>
+            <div class="tech-card">
+              <h4>Survey List &amp; Utility Programs</h4>
+              <p><a href="https://survey.buildee.com/survey/97f1c75b-f820-4819-aab6-72455bdbec20" target="_blank" rel="noreferrer">Survey link</a></p>
+            </div>
+            <div class="tech-card">
+              <h4>How to Test OCR</h4>
+              <p><a href="https://docs.google.com/document/d/1KcOg3PxdZPf9I22e33XC-mSB1K4j8OcUO5zf249EiH0/edit?tab=t.0#heading=h.o3tx3tkn6xf6" target="_blank" rel="noreferrer">Google Doc</a></p>
+            </div>
+            <div class="tech-card">
+              <h4>Calculations Example</h4>
+              <p><a href="https://docs.google.com/spreadsheets/d/1EwLRBahizQ3zwXGpyNckO8HZrOJDo4WWgj0j-RQ7hRg/edit?gid=1744492772#gid=1744492772" target="_blank" rel="noreferrer">Google Sheet</a></p>
+            </div>
+          </div>
+
+          <h4>ESPM-Related Documentation</h4>
+          <ul class="method-list">
+            <li><strong>ESPM Production:</strong> <a href="https://portfoliomanager.energystar.gov/pm/login" target="_blank" rel="noreferrer">portfoliomanager.energystar.gov/pm/login</a></li>
+            <li><strong>ESPM API Docs:</strong>
+              <a href="https://portfoliomanager.energystar.gov/webservices/home/test/api/meter" target="_blank" rel="noreferrer">API test</a> ·
+              <a href="https://portfoliomanager.energystar.gov/pdf/reference/Testing_Web_Services_en_US.pdf" target="_blank" rel="noreferrer">PDF reference</a>
+            </li>
+            <li><strong>ESPM Score Workflow:</strong> <a href="https://docs.google.com/document/d/1xml2X_4VMSRFNw5_vTsrj8C4rtl01IB8WfhyIm0Cnqo/edit?tab=t.0#heading=h.qh47dvlcpe83" target="_blank" rel="noreferrer">Google Doc</a></li>
+            <li><strong>Measure ESPM Impact Scores:</strong> <a href="https://docs.google.com/document/d/1-iScQ9P42ES6za8zch2mk731Ky12_ZNWpiK2mL42lTo/edit?tab=t.0#heading=h.n5dbkfpnr2wr" target="_blank" rel="noreferrer">Google Doc</a></li>
+            <li><strong>Property Types Eligible for 1–100 ENERGY STAR Score:</strong> <a href="https://www.energystar.gov/buildings/benchmark/understand-metrics/property-types/eligible-score" target="_blank" rel="noreferrer">energystar.gov</a></li>
+          </ul>
+
+          <h3 id="qa-jira-board">Jira Boards</h3>
+          <ul>
+            <li><a href="https://simuwatt.atlassian.net/jira/software/c/projects/BUIL/summary" target="_blank" rel="noreferrer">BUIL project summary (Simuwatt Jira)</a></li>
+          </ul>
+        </section>
+
+        <section id="qa-tools">
+          <h2>2.4 Tools Overview</h2>
+          <div class="tech-grid">
+            <div class="tech-card"><h4>Jira</h4><p>Ticket tracking, sprint planning, defect management</p></div>
+            <div class="tech-card"><h4>TestRail</h4><p>Test case management &amp; automated run reporting</p></div>
+            <div class="tech-card"><h4>Slack</h4><p>Team communication &amp; CI notifications</p></div>
+            <div class="tech-card"><h4>Google Drive</h4><p>Shared QA documentation &amp; onboarding materials</p></div>
+            <div class="tech-card"><h4>Postman</h4><p>API testing &amp; exploration</p></div>
+            <div class="tech-card"><h4>Android Studio</h4><p>Android emulator &amp; mobile testing</p></div>
+            <div class="tech-card"><h4>XCode</h4><p>iOS simulator &amp; mobile testing</p></div>
+            <div class="tech-card"><h4>Playwright</h4><p>E2E browser automation framework</p></div>
+          </div>
+        </section>
+
+        <section id="qa-jira">
+          <h2>3. QA Workflow in Jira</h2>
+
+          <h3 id="qa-ticket-validation">3.1 Ticket Validation Process</h3>
+          <p>QA validates all tickets in <strong>"Ready for QA"</strong> status.</p>
+          <div class="quick-cards two">
+            <div class="qcard" style="border-left:3px solid var(--success)">
+              <span class="qcard-label">Passed</span>
+              <span class="qcard-value">✅ Accepted by QA</span>
+            </div>
+            <div class="qcard" style="border-left:3px solid var(--danger)">
+              <span class="qcard-label">Failed</span>
+              <span class="qcard-value">❌ Rejected by QA</span>
+            </div>
+          </div>
+
+          <h3 id="qa-test-envs">3.2 Testing Environments</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Scenario</th><th>Environment</th></tr></thead>
+              <tbody>
+                <tr><td>Default testing</td><td>QA environment</td></tr>
+                <tr><td>Reporting testing</td><td>May be done elsewhere (exception)</td></tr>
+                <tr><td>Production testing (e.g. surveys)</td><td>Move ticket → <strong>In Prod</strong></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="qa-validation">
+          <h2>4. QA Validation Requirements</h2>
+          <p>Before closing a ticket, add validation results in the comments:</p>
+          <ul class="method-list">
+            <li><strong>Scope of testing</strong> — What was tested and on which environment</li>
+            <li><strong>Results</strong> — Pass / Fail for each scenario</li>
+            <li><strong>Notes / edge cases</strong> — Anything noteworthy, including edge cases covered</li>
+          </ul>
+        </section>
+
+        <section id="qa-testrail">
+          <h2>5. Test Case Management (TestRail)</h2>
+
+          <h3 id="qa-tc-rules">5.1 General Rules</h3>
+          <ul>
+            <li>All new functionality <strong>must have test cases</strong> in TestRail.</li>
+            <li>Test cases should include:
+              <ul>
+                <li><strong>Steps</strong></li>
+                <li><strong>Expected results</strong></li>
+                <li><strong>Clear structure</strong></li>
+              </ul>
+            </li>
+          </ul>
+
+          <h3 id="qa-automation-integration">5.2 Automation Integration</h3>
+          <ul>
+            <li>Test runs are <strong>automatically created</strong> via GitHub Actions.</li>
+            <li>Automation is linked to TestRail test cases.</li>
+          </ul>
+
+          <h4>Automation Type Rules</h4>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Automation type</th><th>When to use</th></tr></thead>
+              <tbody>
+                <tr><td><code>Playwright</code></td><td>If automated</td></tr>
+                <tr><td><code>None</code></td><td>If manual</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3 id="qa-tc-best">5.3 Best Practice for Automation</h3>
+          <p>When automating a new scenario:</p>
+          <ol class="timeline">
+            <li>Create the test case in TestRail</li>
+            <li>Copy the test case ID</li>
+            <li>Add the ID to the automated test title</li>
+          </ol>
+
+          <div class="callout warn">
+            <strong>⚠️ Important Notes</strong>
+            <ul style="margin:8px 0 0">
+              <li>If no test case exists, automation will create one automatically (fallback only).</li>
+              <li>This leads to <strong>duplicates</strong> and <strong>poor traceability</strong>.</li>
+            </ul>
+          </div>
+
+          <div class="callout danger">
+            <strong>❌ Do NOT:</strong>
+            <ul style="margin:8px 0 0">
+              <li>Use fake IDs (e.g. <code>C099999999</code>)</li>
+              <li>Use non-existing IDs — test runs will fail</li>
+            </ul>
+          </div>
+        </section>
+
+        <section id="qa-regression">
+          <h2>6. Regression Testing</h2>
+          <ul class="best">
+            <li><strong>Required</strong> for all version releases</li>
+            <li>Focus on <strong>core functionality</strong></li>
+            <li>Cover <strong>critical user flows</strong></li>
+            <li>Ensure <strong>no regressions</strong> are introduced</li>
+          </ul>
+        </section>
+
+        <section id="qa-defects">
+          <h2>7. Defect Management Process</h2>
+
+          <h3 id="qa-defect-creation">7.1 Defect Creation</h3>
+          <p>Each defect must include:</p>
+          <div class="tech-grid">
+            <div class="tech-card"><h4>Summary</h4><p>Short, descriptive title</p></div>
+            <div class="tech-card"><h4>Steps to Reproduce</h4><p>Numbered, deterministic steps</p></div>
+            <div class="tech-card"><h4>Expected Result</h4><p>What should happen</p></div>
+            <div class="tech-card"><h4>Actual Result</h4><p>What happens instead</p></div>
+            <div class="tech-card"><h4>Attachments</h4><p>Screenshots, recordings, logs</p></div>
+            <div class="tech-card"><h4>Environment</h4><p>QA · Staging · Production</p></div>
+            <div class="tech-card"><h4>Priority &amp; Severity</h4><p>Business impact &amp; urgency</p></div>
+            <div class="tech-card"><h4>Impacted Component</h4><p>Area of the product affected</p></div>
+          </div>
+
+          <h3 id="qa-prioritization">7.2 Prioritization</h3>
+          <div class="pipeline-card prod">
+            <div class="pipe-row"><span class="pipe-label">🔴 High</span>Add to current sprint · Assign directly to developer</div>
+          </div>
+          <div class="pipeline-card staging">
+            <div class="pipe-row"><span class="pipe-label">🟡 Others</span>Discuss during sprint planning with Matt</div>
+          </div>
+        </section>
+
+        <section id="qa-prod-validation">
+          <h2>8. Production Validation</h2>
+          <p>After deployment:</p>
+          <ul class="method-list">
+            <li>Retest functionality in <strong>Production</strong></li>
+            <li>Verify the <strong>correct merge</strong></li>
+            <li>Confirm there are <strong>no environment-specific issues</strong></li>
+          </ul>
+        </section>
+
+        <section id="qa-roles">
+          <h2>9. Roles &amp; Responsibilities</h2>
+
+          <div class="tech-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr))">
+            <div class="tech-card">
+              <h4>9.1 QA Responsibilities</h4>
+              <ul style="margin:10px 0 0; padding-left:20px">
+                <li>Validate tickets</li>
+                <li>Document results</li>
+                <li>Maintain TestRail</li>
+                <li>Execute regression</li>
+                <li>Report defects</li>
+                <li>Perform production validation</li>
+              </ul>
+            </div>
+            <div class="tech-card">
+              <h4>9.2 Development Responsibilities</h4>
+              <ul style="margin:10px 0 0; padding-left:20px">
+                <li>Provide proof of testing in tickets</li>
+                <li>Provide impact assessment for complex changes</li>
+                <li>Merge code to Production</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="qa-best-practices">
+          <h2>10. Best Practices</h2>
+          <ul class="best">
+            <li>Keep Jira tickets clear and detailed</li>
+            <li>Ensure all changes are testable</li>
+            <li>Maintain TestRail accuracy</li>
+            <li>Prioritize based on business impact</li>
+            <li>Always validate critical flows</li>
+          </ul>
+        </section>
+      </article>
+
+      <footer class="site-footer">
+        <div>
+          <strong>Buildee QA · Playwright Documentation 2026</strong>
+          <p class="muted">Generated from the official framework documentation.</p>
+        </div>
+        <a href="#top" class="top-link">Back to top ↑</a>
+      </footer>
+    </main>
+  </div>
+
+  <button id="backToTop" class="back-to-top" aria-label="Back to top" title="Back to top">↑</button>
+
+  <script src="script.js"></script>
+</body>
+</html>
