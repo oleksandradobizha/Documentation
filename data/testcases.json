@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": "2026-04-22T21:35:23.174Z",
+  "updatedAt": "2026-04-22T21:35:35.603Z",
   "sections": [
     {
       "id": "sec-002",
@@ -20,8 +20,8 @@
       "id": "TC-0004",
       "sectionId": "sec-002",
       "title": "ESPM import completes for a valid account",
-      "module": "ESPM",
-      "priority": "Highest",
+      "module": "Mobile",
+      "priority": "Medium",
       "automationStatus": "Not Started",
       "description": "Ensure ENERGY STAR Portfolio Manager sync succeeds.",
       "steps": [
@@ -31,7 +31,7 @@
       ],
       "expectedResult": "Import finishes with a success toast and imported buildings appear.",
       "createdAt": "2026-04-20T09:15:00Z",
-      "updatedAt": "2026-04-22T21:35:23.174Z"
+      "updatedAt": "2026-04-22T21:35:35.603Z"
     },
     {
       "id": "TC-0005",
