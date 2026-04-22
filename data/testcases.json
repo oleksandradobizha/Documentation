@@ -1,13 +1,7 @@
 {
   "version": 2,
-  "updatedAt": "2026-04-22T10:00:00Z",
+  "updatedAt": "2026-04-22T21:02:04.017Z",
   "sections": [
-    {
-      "id": "sec-001",
-      "name": "Authentication",
-      "order": 0,
-      "createdAt": "2026-04-20T09:00:00Z"
-    },
     {
       "id": "sec-002",
       "name": "Projects & Buildings",
@@ -16,42 +10,6 @@
     }
   ],
   "testCases": [
-    {
-      "id": "TC-0001",
-      "sectionId": "sec-001",
-      "title": "User can log in with valid credentials",
-      "module": "Project",
-      "priority": "High",
-      "automationStatus": "Done",
-      "description": "Verify the happy-path login flow for an existing active user.",
-      "steps": [
-        "Navigate to /login",
-        "Enter a valid email",
-        "Enter a valid password",
-        "Click Sign In"
-      ],
-      "expectedResult": "User is redirected to /dashboard and sees their profile name.",
-      "createdAt": "2026-04-20T09:00:00Z",
-      "updatedAt": "2026-04-20T09:00:00Z"
-    },
-    {
-      "id": "TC-0002",
-      "sectionId": "sec-001",
-      "title": "Login fails with invalid password",
-      "module": "Project",
-      "priority": "Medium",
-      "automationStatus": "In Progress",
-      "description": "Negative case: wrong password should surface an inline error.",
-      "steps": [
-        "Navigate to /login",
-        "Enter a valid email",
-        "Enter an invalid password",
-        "Click Sign In"
-      ],
-      "expectedResult": "Inline error 'Invalid email or password' is shown; user stays on /login.",
-      "createdAt": "2026-04-20T09:05:00Z",
-      "updatedAt": "2026-04-20T09:05:00Z"
-    },
     {
       "id": "TC-0003",
       "sectionId": "sec-002",
