@@ -42,3 +42,13 @@ Then open http://127.0.0.1:8080.
 ## Content sources
 
 All content is extracted from the accompanying `.docx` files in this repo. Edits should be made in `index.html` and, where appropriate, reflected back into the source docs.
+
+## QA Test Case Portal
+
+This repo also hosts a separate **QA Test Case Portal** for browsing, adding, and editing test cases. Test cases are stored as JSON in `data/testcases.json` and every change becomes a GitHub commit.
+
+- `frontend/` — static UI (deploy to GitHub Pages)
+- `backend/` — Node.js/Express proxy that talks to the GitHub API
+- `data/testcases.json` — source of truth
+
+See [`PORTAL.md`](./PORTAL.md) for the full architecture, setup, and deployment guide.

@@ -1,0 +1,20 @@
+{
+  "name": "qa-docs-backend",
+  "version": "1.0.0",
+  "description": "Backend proxy for the QA Documentation Portal. Reads/writes test cases JSON in GitHub.",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@octokit/rest": "^21.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  }
+}

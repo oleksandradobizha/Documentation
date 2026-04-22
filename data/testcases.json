@@ -1,0 +1,91 @@
+{
+  "version": 2,
+  "updatedAt": "2026-04-22T10:00:00Z",
+  "sections": [
+    {
+      "id": "sec-001",
+      "name": "Authentication",
+      "order": 0,
+      "createdAt": "2026-04-20T09:00:00Z"
+    },
+    {
+      "id": "sec-002",
+      "name": "Projects & Buildings",
+      "order": 1,
+      "createdAt": "2026-04-20T09:00:00Z"
+    }
+  ],
+  "testCases": [
+    {
+      "id": "TC-0001",
+      "sectionId": "sec-001",
+      "title": "User can log in with valid credentials",
+      "module": "Project",
+      "priority": "High",
+      "automationStatus": "Done",
+      "description": "Verify the happy-path login flow for an existing active user.",
+      "steps": [
+        "Navigate to /login",
+        "Enter a valid email",
+        "Enter a valid password",
+        "Click Sign In"
+      ],
+      "expectedResult": "User is redirected to /dashboard and sees their profile name.",
+      "createdAt": "2026-04-20T09:00:00Z",
+      "updatedAt": "2026-04-20T09:00:00Z"
+    },
+    {
+      "id": "TC-0002",
+      "sectionId": "sec-001",
+      "title": "Login fails with invalid password",
+      "module": "Project",
+      "priority": "Medium",
+      "automationStatus": "In Progress",
+      "description": "Negative case: wrong password should surface an inline error.",
+      "steps": [
+        "Navigate to /login",
+        "Enter a valid email",
+        "Enter an invalid password",
+        "Click Sign In"
+      ],
+      "expectedResult": "Inline error 'Invalid email or password' is shown; user stays on /login.",
+      "createdAt": "2026-04-20T09:05:00Z",
+      "updatedAt": "2026-04-20T09:05:00Z"
+    },
+    {
+      "id": "TC-0003",
+      "sectionId": "sec-002",
+      "title": "Create new building from Buildings page",
+      "module": "Buildings",
+      "priority": "Highest",
+      "automationStatus": "Not Started",
+      "description": "Create a new building record and verify it appears in the list.",
+      "steps": [
+        "Open Buildings page",
+        "Click + New Building",
+        "Fill in required fields",
+        "Click Save"
+      ],
+      "expectedResult": "New building is visible in the Buildings list and opens in detail view.",
+      "createdAt": "2026-04-20T09:10:00Z",
+      "updatedAt": "2026-04-20T09:10:00Z"
+    },
+    {
+      "id": "TC-0004",
+      "sectionId": "sec-002",
+      "title": "ESPM import completes for a valid account",
+      "module": "ESPM",
+      "priority": "High",
+      "automationStatus": "Not Started",
+      "description": "Ensure ENERGY STAR Portfolio Manager sync succeeds.",
+      "steps": [
+        "Open a project",
+        "Go to ESPM integration",
+        "Enter credentials and import"
+      ],
+      "expectedResult": "Import finishes with a success toast and imported buildings appear.",
+      "createdAt": "2026-04-20T09:15:00Z",
+      "updatedAt": "2026-04-20T09:15:00Z"
+    }
+  ]
+}

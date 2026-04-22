@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>buildee · QA Portal</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- Top navigation bar -->
+    <header class="appbar">
+      <a class="brand" href="https://buildee.com" target="_blank" rel="noopener" aria-label="buildee">
+        <svg class="brand__mark" viewBox="0 0 32 32" aria-hidden="true">
+          <defs>
+            <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#13B5A6" />
+              <stop offset="1" stop-color="#0E7C8F" />
+            </linearGradient>
+          </defs>
+          <rect x="1" y="1" width="30" height="30" rx="8" fill="url(#bg)" />
+          <path
+            d="M10 9h6.2c3.1 0 5.1 1.7 5.1 4.2 0 1.7-1 2.9-2.5 3.5 1.9.5 3.1 1.9 3.1 3.9 0 2.7-2.2 4.4-5.6 4.4H10V9Zm6 6.4c1.4 0 2.3-.7 2.3-1.9 0-1.1-.9-1.8-2.3-1.8h-2.5v3.7H16Zm.3 6.6c1.5 0 2.5-.8 2.5-2.1 0-1.2-1-2-2.5-2h-2.8V22h2.8Z"
+            fill="#fff"
+          />
+        </svg>
+        <span class="brand__wordmark">buildee</span>
+        <span class="brand__divider" aria-hidden="true"></span>
+        <span class="brand__product">QA Portal</span>
+      </a>
+
+      <nav class="tabs" role="tablist">
+        <button class="tab" role="tab" data-tab="dashboard">Dashboard</button>
+        <button class="tab" role="tab" data-tab="documentation">Documentation</button>
+        <button class="tab is-active" role="tab" data-tab="testcases">Test Cases</button>
+      </nav>
+
+      <div class="appbar__spacer"></div>
+    </header>
+
+    <!-- Dashboard view -->
+    <section id="view-dashboard" class="view hidden">
+      <div class="placeholder">
+        <h2>Dashboard</h2>
+        <p>Metrics, automation coverage, and release health will live here.</p>
+      </div>
+    </section>
+
+    <!-- Documentation view -->
+    <section id="view-documentation" class="view hidden">
+      <div class="placeholder">
+        <h2>Documentation</h2>
+        <p>
+          Playwright framework docs, FAQ, and the QA process guide.
+          <a href="../index.html">Open the static docs site →</a>
+        </p>
+      </div>
+    </section>
+
+    <!-- Test Cases view -->
+    <section id="view-testcases" class="view">
+      <aside class="sidebar">
+        <div class="sidebar__header">
+          <span class="sidebar__title">Sections</span>
+          <button id="btnAddSection" class="btn-icon" title="Add section" aria-label="Add section">+</button>
+        </div>
+        <ul id="sectionList" class="section-list" role="listbox"></ul>
+        <p id="sectionEmpty" class="sidebar__empty hidden">
+          No sections yet. Click + to add one.
+        </p>
+      </aside>
+
+      <main class="content">
+        <div class="content__header">
+          <div class="content__title">
+            <h2 id="sectionTitle">Select a section</h2>
+            <span id="sectionMeta" class="content__meta"></span>
+          </div>
+          <div class="content__actions">
+            <input
+              id="search"
+              type="search"
+              placeholder="Search ID or title..."
+              autocomplete="off"
+            />
+            <button id="btnAddTc" class="btn btn-primary" disabled>
+              + Add Test Case
+            </button>
+            <button id="btnRenameSection" class="btn" disabled>Rename</button>
+            <button id="btnDeleteSection" class="btn btn-danger" disabled>
+              Delete section
+            </button>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table id="tcTable">
+            <thead>
+              <tr>
+                <th class="col-id">ID</th>
+                <th>Title</th>
+                <th class="col-module">Module</th>
+                <th class="col-priority">Priority</th>
+                <th class="col-auto">Automation Status</th>
+                <th class="col-actions">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="tcBody"></tbody>
+          </table>
+          <p id="emptyState" class="empty hidden">No test cases in this section yet.</p>
+          <p id="noSectionState" class="empty">
+            Pick a section on the left, or create a new one.
+          </p>
+          <p id="loadState" class="empty hidden">Loading...</p>
+        </div>
+      </main>
+    </section>
+
+    <!-- Test Case Modal -->
+    <div id="tcModal" class="modal hidden" aria-hidden="true">
+      <div class="modal__content" role="dialog" aria-modal="true">
+        <h3 id="tcModalTitle">Add Test Case</h3>
+        <form id="tcForm">
+          <input type="hidden" name="id" />
+          <input type="hidden" name="sectionId" />
+          <label>
+            Title
+            <input name="title" required maxlength="200" />
+          </label>
+          <div class="grid-3">
+            <label>
+              Module
+              <select name="module" required>
+                <option value="Analysis">Analysis</option>
+                <option value="Buildings">Buildings</option>
+                <option value="ESPM">ESPM</option>
+                <option value="Measures">Measures</option>
+                <option value="Mobile">Mobile</option>
+                <option value="Project" selected>Project</option>
+                <option value="Proposal">Proposal</option>
+              </select>
+            </label>
+            <label>
+              Priority
+              <select name="priority" required>
+                <option value="Highest">Highest</option>
+                <option value="High" selected>High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+              </select>
+            </label>
+            <label>
+              Automation Status
+              <select name="automationStatus" required>
+                <option value="Not Started" selected>Not Started</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Done">Done</option>
+              </select>
+            </label>
+          </div>
+          <label>
+            Description
+            <textarea name="description" rows="2" placeholder="Short summary (optional)"></textarea>
+          </label>
+          <label>
+            Steps <small>(one per line, optional)</small>
+            <textarea name="steps" rows="5"></textarea>
+          </label>
+          <label>
+            Expected Result
+            <textarea name="expectedResult" rows="2" placeholder="Optional"></textarea>
+          </label>
+          <div class="modal__actions">
+            <button type="button" id="btnDeleteTc" class="btn btn-danger-ghost hidden">Delete</button>
+            <div class="modal__actions-right">
+              <button type="button" class="btn" data-close-modal>Cancel</button>
+              <button type="submit" id="btnSaveTc" class="btn btn-primary">Save</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Section Modal (add/rename) -->
+    <div id="sectionModal" class="modal hidden" aria-hidden="true">
+      <div class="modal__content modal__content--sm" role="dialog" aria-modal="true">
+        <h3 id="sectionModalTitle">Add Section</h3>
+        <form id="sectionForm">
+          <input type="hidden" name="id" />
+          <label>
+            Section name
+            <input name="name" required maxlength="80" placeholder="e.g. Authentication" />
+          </label>
+          <div class="modal__actions">
+            <div></div>
+            <div class="modal__actions-right">
+              <button type="button" class="btn" data-close-modal>Cancel</button>
+              <button type="submit" id="btnSaveSection" class="btn btn-primary">Save</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast hidden"></div>
+
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
