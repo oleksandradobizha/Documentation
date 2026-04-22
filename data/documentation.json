@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-04-22T23:00:37.267Z",
+  "updatedAt": "2026-04-22T23:03:17.889Z",
   "sections": [
     {
       "id": "doc-001",
@@ -14,9 +14,9 @@
       "id": "doc-002",
       "name": "Important Links",
       "order": 1,
-      "content": "<p></p><h1><b>Testing Materials</b></h1><ol><li><b>Survey List &amp; Utility Programs</b>:&nbsp;<a href=\"https://survey.buildee.com/survey/97f1c75b-f820-4819-aab6-72455bdbec20\">https://survey.buildee.com/survey/97f1c75b-f820-4819-aab6-72455bdbec20</a></li><li><b>Manual OCR Testing:</b>&nbsp;<a href=\"https://docs.google.com/document/d/1KcOg3PxdZPf9I22e33XC-mSB1K4j8OcUO5zf249EiH0/edit?tab=t.0#heading=h.o3tx3tkn6xf6\">https://docs.google.com/document/</a></li><li><b>Calculation Examples:</b> <a href=\"https://docs.google.com/spreadsheets/d/1EwLRBahizQ3zwXGpyNckO8HZrOJDo4WWgj0j-RQ7hRg/edit?gid=1744492772#gid=1744492772\">https://docs.google.com/spreadsheets/</a></li></ol><h1>ESPM-Related Documentation</h1><div>1.&nbsp;</div><div><br></div><p></p>",
+      "content": "<p></p><h1><b>Testing Materials</b></h1><ol><li><b>Survey List &amp; Utility Programs</b>:&nbsp;<a href=\"https://survey.buildee.com/survey/97f1c75b-f820-4819-aab6-72455bdbec20\">https://survey.buildee.com/survey/97f1c75b-f820-4819-aab6-72455bdbec20</a></li><li><b>Manual OCR Testing:</b>&nbsp;<a href=\"https://docs.google.com/document/d/1KcOg3PxdZPf9I22e33XC-mSB1K4j8OcUO5zf249EiH0/edit?tab=t.0#heading=h.o3tx3tkn6xf6\">https://docs.google.com/document/</a></li><li><b>Calculation Examples:</b> <a href=\"https://docs.google.com/spreadsheets/d/1EwLRBahizQ3zwXGpyNckO8HZrOJDo4WWgj0j-RQ7hRg/edit?gid=1744492772#gid=1744492772\">https://docs.google.com/spreadsheets/</a></li></ol><h1>ESPM-Related Documentation</h1><div><ol><li><b>ESPM Production</b>: <a href=\"https://portfoliomanager.energystar.gov/pm/login\">portfoliomanager.energystar.gov/pm/login</a></li><li><span style=\"font-family: Inter, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, sans-serif;\"><b>ESPM API Docs</b>: <a href=\"https://portfoliomanager.energystar.gov/webservices/home/test/api/meter\">API test </a>· <a href=\"https://portfoliomanager.energystar.gov/pdf/reference/Testing_Web_Services_en_US.pdf\">PDF reference</a></span></li><li><b>ESPM Score Workflow</b>: <a href=\"https://docs.google.com/document/d/1xml2X_4VMSRFNw5_vTsrj8C4rtl01IB8WfhyIm0Cnqo/edit?tab=t.0#heading=h.qh47dvlcpe83\">Google Doc</a></li><li><b>Measure ESPM Impact Scores</b>: <a href=\"https://docs.google.com/document/d/1-iScQ9P42ES6za8zch2mk731Ky12_ZNWpiK2mL42lTo/edit?tab=t.0#heading=h.n5dbkfpnr2wr\">Google Doc</a></li><li><b>Property Types Eligible for 1–100 ENERGY STAR Score</b>: <a href=\"https://www.energystar.gov/buildings/benchmark/understand-metrics/property-types/eligible-score\">energystar.gov</a></li></ol></div><div><br></div><p></p>",
       "createdAt": "2026-04-22T21:45:12.527Z",
-      "updatedAt": "2026-04-22T23:00:18.299Z"
+      "updatedAt": "2026-04-22T23:03:17.889Z"
     },
     {
       "id": "doc-003",
