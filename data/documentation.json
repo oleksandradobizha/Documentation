@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-04-22T23:00:18.299Z",
+  "updatedAt": "2026-04-22T23:00:37.267Z",
   "sections": [
     {
       "id": "doc-001",
@@ -22,9 +22,9 @@
       "id": "doc-003",
       "name": "Test Automation",
       "order": 2,
-      "content": "",
+      "content": "<b>Playwright Automation Repo: </b><a href=\"https://github.com/simuwatt/automation-qa\">https://github.com/simuwatt/automation-qa</a>",
       "createdAt": "2026-04-22T22:59:54.247Z",
-      "updatedAt": "2026-04-22T22:59:54.247Z"
+      "updatedAt": "2026-04-22T23:00:37.267Z"
     }
   ]
 }
