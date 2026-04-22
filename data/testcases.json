@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": "2026-04-22T21:35:35.603Z",
+  "updatedAt": "2026-04-22T23:35:51.421Z",
   "sections": [
     {
       "id": "sec-002",
@@ -45,6 +45,25 @@
       "expectedResult": "",
       "createdAt": "2026-04-22T21:18:34.773Z",
       "updatedAt": "2026-04-22T21:31:03.874Z"
+    },
+    {
+      "id": "TC-0006",
+      "sectionId": "sec-002",
+      "title": "Successfully save a proposal containing v3 measures",
+      "module": "Proposal",
+      "priority": "Highest",
+      "automationStatus": "Not Started",
+      "description": "Source: https://simuwatt.atlassian.net/browse/BUIL-14606\nThis test verifies that a proposal containing v3 measures can be saved without encountering any errors.",
+      "steps": [
+        "Navigate to the Proposals module",
+        "Open an existing proposal or create a new one",
+        "Add at least one v3 measure to the proposal",
+        "Make a minor change to the proposal",
+        "Click the 'Save' button"
+      ],
+      "expectedResult": "The proposal should save successfully, and no error messages should be displayed.",
+      "createdAt": "2026-04-22T23:35:51.421Z",
+      "updatedAt": "2026-04-22T23:35:51.421Z"
     }
   ]
 }
