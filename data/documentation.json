@@ -1,14 +1,14 @@
 {
   "version": 1,
-  "updatedAt": "2026-04-22T22:43:15.438Z",
+  "updatedAt": "2026-04-22T22:46:45.379Z",
   "sections": [
     {
       "id": "doc-001",
       "name": "QA Process",
       "order": 0,
-      "content": "<h1><b>&nbsp;Welcome</b></h1><b>Welcome to the buildee team! </b>This guide will help you get started and provide essential resources to begin working effectively as part of the QA team.<div><div class=\"doc-cards\">\n        <div class=\"doc-card\">\n          <strong class=\"doc-card__title\">Production</strong>\n          <span class=\"doc-card__body\"><a href=\"https://app.buildee.com\">app.buildee.com</a></span>\n        </div>\n        <div class=\"doc-card\">\n          <strong class=\"doc-card__title\">QA</strong>\n          <span class=\"doc-card__body\"><a href=\"https://htpps://qa.buildee.com\">https://htpps://qa.buildee.com</a><br></span>\n        </div>\n        <div class=\"doc-card\">\n          <strong class=\"doc-card__title\">Staging</strong>\n          <a href=\"https://staging.buildee.com\">https://staging.buildee.com</a><br>\n        </div>\n        <div class=\"doc-card\">\n          <strong class=\"doc-card__title\"><span style=\"font-family: Inter, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, sans-serif;\">Default test env</span></strong><strong class=\"doc-card__title\"><font color=\"#64748b\"><span style=\"font-size: 13px;\">QA</span></font></strong>\n        </div></div><p><br></p></div>",
+      "content": "<h1><b>Welcome</b></h1><b>Welcome to the buildee team! </b>This guide will help you get started and provide essential resources to begin working effectively as part of the QA team.<div><div class=\"doc-cards\">\n        <div class=\"doc-card\">\n          <strong class=\"doc-card__title\">Production</strong>\n          <span class=\"doc-card__body\"><a href=\"https://app.buildee.com\">app.buildee.com</a></span><span class=\"doc-card__body\">Live user-facing environment</span>\n        </div>\n        <div class=\"doc-card\">\n          <strong class=\"doc-card__title\">QA</strong>\n          <span class=\"doc-card__body\"><a href=\"https://htpps://qa.buildee.com\">https://htpps://qa.buildee.com</a><font color=\"#1e293b\" face=\"ui-monospace, SFMono-Regular, Menlo, monospace\"><span style=\"font-size: 12.5px; background-color: rgb(238, 243, 239);\"><br></span></font>Auto-deployed when code merges into the <code>develop</code> branch</span>\n        </div>\n        <div class=\"doc-card\">\n          <strong class=\"doc-card__title\">Staging</strong>\n          <a href=\"https://staging.buildee.com\">https://staging.buildee.com</a>&nbsp;<br>Pre-production validation · shares DB/users with prod · most stable, hosts automation runs\n        </div>\n        <div class=\"doc-card\">\n          <strong class=\"doc-card__title\"><span style=\"font-family: Inter, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, sans-serif;\">Default test env</span></strong><strong class=\"doc-card__title\"><font color=\"#64748b\"><span style=\"font-size: 13px;\">QA</span></font></strong>\n        </div></div><p><br></p></div>",
       "createdAt": "2026-04-22T21:43:09.690Z",
-      "updatedAt": "2026-04-22T22:43:15.438Z"
+      "updatedAt": "2026-04-22T22:46:45.379Z"
     },
     {
       "id": "doc-002",
