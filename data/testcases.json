@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": "2026-04-22T21:04:41.282Z",
+  "updatedAt": "2026-04-22T21:07:38.447Z",
   "sections": [
     {
       "id": "sec-002",
@@ -16,24 +16,6 @@
     }
   ],
   "testCases": [
-    {
-      "id": "TC-0003",
-      "sectionId": "sec-002",
-      "title": "Create new building from Buildings page",
-      "module": "Buildings",
-      "priority": "Highest",
-      "automationStatus": "Not Started",
-      "description": "Create a new building record and verify it appears in the list.",
-      "steps": [
-        "Open Buildings page",
-        "Click + New Building",
-        "Fill in required fields",
-        "Click Save"
-      ],
-      "expectedResult": "New building is visible in the Buildings list and opens in detail view.",
-      "createdAt": "2026-04-20T09:10:00Z",
-      "updatedAt": "2026-04-20T09:10:00Z"
-    },
     {
       "id": "TC-0004",
       "sectionId": "sec-002",
