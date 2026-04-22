@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-04-22T22:46:45.379Z",
+  "updatedAt": "2026-04-22T22:54:40.104Z",
   "sections": [
     {
       "id": "doc-001",
@@ -14,9 +14,9 @@
       "id": "doc-002",
       "name": "Important Links",
       "order": 1,
-      "content": "",
+      "content": "<table class=\"doc-table doc-table--active\"><thead><tr><th>Column 1</th><th>Column 2</th></tr></thead><tbody><tr><td>Playwright Automation Repo</td><td>github.com/simuwatt/automation-qa</td></tr><tr><td><br></td><td><br></td></tr><tr><td><br></td><td><br></td></tr><tr><td><br></td><td><br></td></tr><tr><td><br></td><td><br></td></tr><tr><td><br></td><td><br></td></tr></tbody></table><p><br></p>",
       "createdAt": "2026-04-22T21:45:12.527Z",
-      "updatedAt": "2026-04-22T21:45:12.527Z"
+      "updatedAt": "2026-04-22T22:54:40.104Z"
     }
   ]
 }
