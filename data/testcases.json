@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": "2026-04-22T21:07:38.447Z",
+  "updatedAt": "2026-04-22T21:18:29.769Z",
   "sections": [
     {
       "id": "sec-002",
@@ -32,21 +32,6 @@
       "expectedResult": "Import finishes with a success toast and imported buildings appear.",
       "createdAt": "2026-04-20T09:15:00Z",
       "updatedAt": "2026-04-20T09:15:00Z"
-    },
-    {
-      "id": "TC-0005",
-      "sectionId": "sec-002",
-      "title": "11",
-      "module": "Project",
-      "priority": "High",
-      "automationStatus": "In Progress",
-      "description": "11",
-      "steps": [
-        "11"
-      ],
-      "expectedResult": "111",
-      "createdAt": "2026-04-22T21:02:22.444Z",
-      "updatedAt": "2026-04-22T21:02:29.543Z"
     }
   ]
 }
