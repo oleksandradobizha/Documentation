@@ -1,14 +1,14 @@
 {
   "version": 1,
-  "updatedAt": "2026-04-22T21:45:12.527Z",
+  "updatedAt": "2026-04-22T21:52:16.775Z",
   "sections": [
     {
       "id": "doc-001",
       "name": "QA Process",
       "order": 0,
-      "content": "<b>Welcome to the buildee team! </b>This guide will help you get started and provide essential resources to begin working effectively as part of the QA team.<div>Production -&nbsp;<span style=\"font-family: Inter, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, sans-serif;\">app.buildee.com</span></div><div>Staging -&nbsp;<span style=\"font-family: Inter, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, sans-serif;\">staging.buildee.com</span></div><div>QA -&nbsp;<span style=\"font-family: Inter, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, sans-serif;\">qa.buildee.com</span></div><div>Default test env&nbsp;<span style=\"font-family: Inter, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, sans-serif;\">QA</span></div>",
+      "content": "<b>Welcome to the buildee team! </b>This guide will help you get started and provide essential resources to begin working effectively as part of the QA team.<div>Production -&nbsp;<span style=\"font-family: Inter, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, sans-serif;\">app.buildee.com</span></div><div>Staging -&nbsp;<span style=\"font-family: Inter, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, sans-serif;\">staging.buildee.com</span></div><div>QA -&nbsp;<span style=\"font-family: Inter, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, sans-serif;\">qa.buildee.com</span></div><div>Default test env&nbsp;<span style=\"font-family: Inter, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, sans-serif;\">QA</span></div><div><span style=\"font-family: Inter, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, sans-serif;\"><br></span></div>",
       "createdAt": "2026-04-22T21:43:09.690Z",
-      "updatedAt": "2026-04-22T21:44:48.685Z"
+      "updatedAt": "2026-04-22T21:52:16.775Z"
     },
     {
       "id": "doc-002",
