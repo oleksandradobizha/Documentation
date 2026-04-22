@@ -1,14 +1,14 @@
 {
   "version": 1,
-  "updatedAt": "2026-04-22T22:11:49.207Z",
+  "updatedAt": "2026-04-22T22:11:53.115Z",
   "sections": [
     {
       "id": "doc-001",
       "name": "QA Process",
       "order": 0,
-      "content": "<b>Welcome to the buildee team! </b>This guide will help you get started and provide essential resources to begin working effectively as part of the QA team.<div>&nbsp;-&nbsp;</div><div>&nbsp;-&nbsp;<span style=\"font-family: Inter, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, sans-serif;\">staging.buildee.com</span></div><div>X -&nbsp;</div><div>Default test env&nbsp;<span style=\"font-family: Inter, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, sans-serif;\">QA</span></div><div><div class=\"doc-cards doc-cards--active\">\n        <div class=\"doc-card\">\n          <strong class=\"doc-card__title\">Production</strong>\n          <span class=\"doc-card__body\"><a href=\"https://app.buildee.com\">app.buildee.com</a></span>\n        </div>\n        <div class=\"doc-card\">\n          <strong class=\"doc-card__title\">QA</strong>\n          <span class=\"doc-card__body\"><a href=\"https://htpps://qa.buildee.com\">https://htpps://qa.buildee.com</a><br></span>\n        </div>\n        <div class=\"doc-card doc-card--active\">\n          <strong class=\"doc-card__title\">Card 3</strong>\n          <span class=\"doc-card__body\">Describe this card…</span>\n        </div>\n        <div class=\"doc-card\">\n          <strong class=\"doc-card__title\">Card 4</strong>\n          <span class=\"doc-card__body\">Describe this card…</span>\n        </div></div><p><br></p></div>",
+      "content": "<b>Welcome to the buildee team! </b>This guide will help you get started and provide essential resources to begin working effectively as part of the QA team.<div>&nbsp;-&nbsp;</div><div>&nbsp;-&nbsp;</div><div>X -&nbsp;</div><div>Default test env&nbsp;<span style=\"font-family: Inter, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, sans-serif;\">QA</span></div><div><div class=\"doc-cards\">\n        <div class=\"doc-card\">\n          <strong class=\"doc-card__title\">Production</strong>\n          <span class=\"doc-card__body\"><a href=\"https://app.buildee.com\">app.buildee.com</a></span>\n        </div>\n        <div class=\"doc-card\">\n          <strong class=\"doc-card__title\">QA</strong>\n          <span class=\"doc-card__body\"><a href=\"https://htpps://qa.buildee.com\">https://htpps://qa.buildee.com</a><br></span>\n        </div>\n        <div class=\"doc-card\">\n          <strong class=\"doc-card__title\">Staging</strong>\n          <span class=\"doc-card__body\">Describe this card…</span>\n        </div>\n        <div class=\"doc-card\">\n          <strong class=\"doc-card__title\">Card 4</strong>\n          <span class=\"doc-card__body\">Describe this card…</span>\n        </div></div><p><br></p></div>",
       "createdAt": "2026-04-22T21:43:09.690Z",
-      "updatedAt": "2026-04-22T22:11:49.207Z"
+      "updatedAt": "2026-04-22T22:11:53.115Z"
     },
     {
       "id": "doc-002",
