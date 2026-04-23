@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-04-23T17:43:04.899Z",
+  "updatedAt": "2026-04-23T17:43:37.188Z",
   "sections": [
     {
       "id": "doc-001",
@@ -46,7 +46,8 @@
       "parentId": null,
       "content": "",
       "createdAt": "2026-04-23T17:33:13.077Z",
-      "updatedAt": "2026-04-23T17:33:13.077Z"
+      "updatedAt": "2026-04-23T17:43:37.188Z",
+      "icon": "🧩"
     }
   ]
 }
