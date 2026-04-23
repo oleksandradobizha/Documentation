@@ -1,4 +1,8 @@
 import { Octokit } from "@octokit/rest";
+import {
+  UNDEFINED_SECTION_ID,
+  UNDEFINED_SECTION_NAME,
+} from "../utils/validate.js";
 
 let _octokit;
 function octokit() {
@@ -65,8 +69,60 @@ async function writeJsonFile(path, json, sha, message) {
   return data.content?.sha;
 }
 
+// Normalize sections/test cases: guarantee an "Undefined" section and
+// reassign orphaned test cases to it. Mutates `json` in place. Returns
+// true if any changes were applied.
+function normalizeTestCasesJson(json) {
+  let changed = false;
+  if (!Array.isArray(json.sections)) {
+    json.sections = [];
+    changed = true;
+  }
+  if (!Array.isArray(json.testCases)) {
+    json.testCases = [];
+    changed = true;
+  }
+  // Ensure every section has a parentId field (null for root).
+  for (const s of json.sections) {
+    if (!Object.prototype.hasOwnProperty.call(s, "parentId")) {
+      s.parentId = null;
+      changed = true;
+    }
+  }
+  // Ensure an "Undefined" catch-all section exists.
+  let undef = json.sections.find((s) => s.id === UNDEFINED_SECTION_ID);
+  if (!undef) {
+    // Maybe the user already created a section named "Undefined" — reuse it.
+    undef = json.sections.find(
+      (s) => (s.name || "").trim().toLowerCase() === "undefined"
+    );
+    if (!undef) {
+      undef = {
+        id: UNDEFINED_SECTION_ID,
+        name: UNDEFINED_SECTION_NAME,
+        parentId: null,
+        order: -1,
+        createdAt: new Date().toISOString(),
+      };
+      json.sections.unshift(undef);
+      changed = true;
+    }
+  }
+  // Move orphan test cases into Undefined.
+  const sectionIds = new Set(json.sections.map((s) => s.id));
+  for (const tc of json.testCases) {
+    if (!tc.sectionId || !sectionIds.has(tc.sectionId)) {
+      tc.sectionId = undef.id;
+      changed = true;
+    }
+  }
+  return changed;
+}
+
 export async function readTestCasesFile() {
-  return readJsonFile(testCasesPath());
+  const result = await readJsonFile(testCasesPath());
+  normalizeTestCasesJson(result.json);
+  return result;
 }
 
 export async function writeTestCasesFile(json, sha, message) {

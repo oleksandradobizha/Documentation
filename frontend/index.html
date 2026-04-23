@@ -14,63 +14,232 @@
     <!-- Top navigation bar -->
     <header class="appbar">
       <a class="brand" href="https://buildee.com" target="_blank" rel="noopener" aria-label="buildee">
-        <svg class="brand__mark" viewBox="0 0 32 32" aria-hidden="true">
-          <defs>
-            <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0" stop-color="#13B5A6" />
-              <stop offset="1" stop-color="#0E7C8F" />
-            </linearGradient>
-          </defs>
-          <rect x="1" y="1" width="30" height="30" rx="8" fill="url(#bg)" />
-          <path
-            d="M10 9h6.2c3.1 0 5.1 1.7 5.1 4.2 0 1.7-1 2.9-2.5 3.5 1.9.5 3.1 1.9 3.1 3.9 0 2.7-2.2 4.4-5.6 4.4H10V9Zm6 6.4c1.4 0 2.3-.7 2.3-1.9 0-1.1-.9-1.8-2.3-1.8h-2.5v3.7H16Zm.3 6.6c1.5 0 2.5-.8 2.5-2.1 0-1.2-1-2-2.5-2h-2.8V22h2.8Z"
-            fill="#fff"
-          />
-        </svg>
-        <span class="brand__wordmark">buildee</span>
+        <img class="brand__logo" src="assets/buildee-logo.png" alt="buildee" />
         <span class="brand__divider" aria-hidden="true"></span>
         <span class="brand__product">QA Portal</span>
       </a>
 
       <nav class="tabs" role="tablist">
-        <button class="tab" role="tab" data-tab="dashboard">Dashboard</button>
+        <button class="tab is-active" role="tab" data-tab="dashboard">Dashboard</button>
         <button class="tab" role="tab" data-tab="documentation">Documentation</button>
-        <button class="tab is-active" role="tab" data-tab="testcases">Test Cases</button>
+        <button class="tab" role="tab" data-tab="testcases">Test Cases</button>
+        <button class="tab" role="tab" data-tab="jira">Jira Tickets</button>
       </nav>
 
       <div class="appbar__spacer"></div>
     </header>
 
-    <!-- Dashboard view -->
-    <section id="view-dashboard" class="view hidden">
-      <div class="placeholder">
-        <h2>Dashboard</h2>
-        <p>Metrics, automation coverage, and release health will live here.</p>
+    <!-- =============================================================== -->
+    <!-- Dashboard view                                                  -->
+    <!-- =============================================================== -->
+    <section id="view-dashboard" class="view">
+      <div class="dashboard">
+        <div class="dashboard__grid">
+          <div class="card card--ring">
+            <div class="card__header">
+              <h3 class="card__title">Overall automation coverage</h3>
+              <p class="card__subtitle">% of test cases marked Done</p>
+            </div>
+            <div class="ring-wrap">
+              <svg class="ring" viewBox="0 0 120 120" aria-hidden="true">
+                <circle class="ring__bg" cx="60" cy="60" r="52" />
+                <circle id="ringFg" class="ring__fg" cx="60" cy="60" r="52" />
+              </svg>
+              <div class="ring__center">
+                <span id="ringPct" class="ring__pct">0%</span>
+                <span class="ring__label">Done</span>
+              </div>
+            </div>
+            <ul id="overallLegend" class="legend"></ul>
+          </div>
+
+          <div class="card card--chart">
+            <div class="card__header">
+              <h3 class="card__title">Coverage by module</h3>
+              <p class="card__subtitle">Distribution of automation status per module</p>
+            </div>
+            <div id="moduleChart" class="chart"></div>
+            <p id="moduleChartEmpty" class="empty hidden">No test cases yet.</p>
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- Documentation view -->
+    <!-- =============================================================== -->
+    <!-- Documentation view                                              -->
+    <!-- =============================================================== -->
     <section id="view-documentation" class="view hidden">
-      <div class="placeholder">
-        <h2>Documentation</h2>
-        <p>
-          Playwright framework docs, FAQ, and the QA process guide.
-          <a href="../index.html">Open the static docs site →</a>
+      <aside class="sidebar">
+        <div class="sidebar__header">
+          <span class="sidebar__title">Documentation</span>
+          <div class="sidebar__header-actions">
+            <button id="btnRenameDocSection" class="btn-icon" title="Rename section" aria-label="Rename section" disabled>✎</button>
+            <button id="btnDeleteDocSection" class="btn-icon" title="Delete section" aria-label="Delete section" disabled>🗑</button>
+            <button id="btnGenerateDocSection" class="btn-icon btn-icon--ai hidden" title="Generate section with AI" aria-label="Generate section with AI">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 3l2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3z"></path>
+              </svg>
+            </button>
+            <button id="btnAddDocSection" class="btn-icon" title="Add section" aria-label="Add section">+</button>
+          </div>
+        </div>
+        <ul id="docSectionList" class="section-list" role="listbox"></ul>
+        <p id="docSectionEmpty" class="sidebar__empty hidden">
+          No sections yet. Click + to add one.
         </p>
-      </div>
+      </aside>
+
+      <main class="content content--doc">
+        <div class="content__header">
+          <div class="content__title">
+            <h2 id="docSectionTitle">Select a section</h2>
+            <span id="docSectionMeta" class="content__meta"></span>
+          </div>
+          <div class="content__actions">
+            <span id="docSaveStatus" class="doc-save-status" aria-live="polite"></span>
+            <button id="btnCancelDoc" class="btn hidden">Cancel</button>
+            <button id="btnEditDoc" class="btn">Edit</button>
+            <button id="btnSaveDoc" class="btn btn-primary hidden" disabled>Save</button>
+          </div>
+        </div>
+
+        <div id="docEmptyState" class="empty">
+          Pick a section on the left, or create a new one.
+        </div>
+
+        <!-- Read-only viewer -->
+        <article id="docViewer" class="doc-viewer hidden" aria-live="polite"></article>
+
+        <!-- Editor wrapper (toolbar + contenteditable) -->
+        <div id="docEditorWrap" class="doc-editor-wrap hidden">
+          <div class="doc-toolbar" role="toolbar" aria-label="Editor toolbar">
+            <div class="doc-toolbar__group">
+              <select id="docBlockStyle" class="doc-select" aria-label="Block style">
+                <option value="p" selected>Normal text</option>
+                <option value="h1">Heading 1</option>
+                <option value="h2">Heading 2</option>
+                <option value="h3">Heading 3</option>
+                <option value="blockquote">Quote</option>
+                <option value="pre">Code block</option>
+              </select>
+              <select id="docFontFamily" class="doc-select doc-select--sm" aria-label="Font family" title="Font family">
+                <option value="">Font</option>
+                <option value="Inter, sans-serif">Inter</option>
+                <option value="Arial, Helvetica, sans-serif">Arial</option>
+                <option value="Helvetica, Arial, sans-serif">Helvetica</option>
+                <option value="Georgia, serif">Georgia</option>
+                <option value="'Times New Roman', Times, serif">Times New Roman</option>
+                <option value="'Courier New', Courier, monospace">Courier New</option>
+                <option value="ui-monospace, SFMono-Regular, Menlo, monospace">Mono</option>
+              </select>
+              <select id="docFontSize" class="doc-select doc-select--sm" aria-label="Font size" title="Font size">
+                <option value="">Size</option>
+                <option value="10px">10</option>
+                <option value="12px">12</option>
+                <option value="14px">14</option>
+                <option value="16px">16</option>
+                <option value="18px">18</option>
+                <option value="20px">20</option>
+                <option value="24px">24</option>
+                <option value="32px">32</option>
+                <option value="48px">48</option>
+              </select>
+              <label class="doc-color" title="Text color" aria-label="Text color">
+                <span class="doc-color__label" aria-hidden="true">A</span>
+                <input id="docFontColor" type="color" value="#0f172a" aria-label="Text color" />
+              </label>
+            </div>
+
+            <div class="doc-toolbar__group">
+              <button type="button" class="doc-btn" data-cmd="bold" title="Bold" aria-label="Bold"><b>B</b></button>
+              <button type="button" class="doc-btn doc-btn--italic" data-cmd="italic" title="Italic" aria-label="Italic"><i>I</i></button>
+              <button type="button" class="doc-btn" data-cmd="underline" title="Underline" aria-label="Underline"><u>U</u></button>
+              <button type="button" class="doc-btn doc-btn--strike" data-cmd="strikeThrough" title="Strikethrough" aria-label="Strikethrough"><s>S</s></button>
+            </div>
+
+            <div class="doc-toolbar__group">
+              <button type="button" class="doc-btn" data-cmd="insertUnorderedList" title="Bulleted list" aria-label="Bulleted list">•</button>
+              <button type="button" class="doc-btn" data-cmd="insertOrderedList" title="Numbered list" aria-label="Numbered list">1.</button>
+              <button type="button" class="doc-btn doc-btn--code" data-cmd="inlineCode" title="Inline code" aria-label="Inline code">&lt;/&gt;</button>
+              <button type="button" class="doc-btn" data-cmd="createLink" title="Add link" aria-label="Add link">🔗</button>
+            </div>
+
+            <div class="doc-toolbar__group doc-toolbar__group--inserters">
+              <div class="doc-insert">
+                <button
+                  id="btnInsertTable"
+                  type="button"
+                  class="doc-btn"
+                  title="Insert table"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                  aria-label="Insert table"
+                >Table ▾</button>
+                <div id="tablePicker" class="table-picker hidden" role="dialog" aria-label="Pick table size">
+                  <div id="tablePickerGrid" class="table-picker__grid"></div>
+                  <div id="tablePickerLabel" class="table-picker__label">0 × 0</div>
+                </div>
+              </div>
+              <button id="btnInsertCards" type="button" class="doc-btn" title="Insert cards" aria-label="Insert cards">Cards</button>
+            </div>
+
+            <div id="tableContextGroup" class="doc-toolbar__group doc-toolbar__group--context" hidden>
+              <span class="doc-toolbar__label">Table:</span>
+              <button id="btnTableAddRow" type="button" class="doc-btn doc-btn--sm" title="Add row">+Row</button>
+              <button id="btnTableAddCol" type="button" class="doc-btn doc-btn--sm" title="Add column">+Col</button>
+              <button id="btnTableDelRow" type="button" class="doc-btn doc-btn--sm" title="Delete row">−Row</button>
+              <button id="btnTableDelCol" type="button" class="doc-btn doc-btn--sm" title="Delete column">−Col</button>
+              <button id="btnTableDelete" type="button" class="doc-btn doc-btn--sm doc-btn--danger" title="Delete table">Delete</button>
+            </div>
+
+            <div id="cardsContextGroup" class="doc-toolbar__group doc-toolbar__group--context" hidden>
+              <span class="doc-toolbar__label">Cards:</span>
+              <button id="btnCardMoveLeft" type="button" class="doc-btn doc-btn--sm" title="Move card left">←</button>
+              <button id="btnCardMoveRight" type="button" class="doc-btn doc-btn--sm" title="Move card right">→</button>
+              <button id="btnCardAdd" type="button" class="doc-btn doc-btn--sm" title="Add card">+Card</button>
+              <button id="btnCardRemove" type="button" class="doc-btn doc-btn--sm" title="Remove this card">−Card</button>
+              <button id="btnCardsDelete" type="button" class="doc-btn doc-btn--sm doc-btn--danger" title="Delete cards block">Delete</button>
+            </div>
+          </div>
+
+          <div
+            id="docEditor"
+            class="doc-editor"
+            contenteditable="true"
+            role="textbox"
+            aria-multiline="true"
+            aria-label="Section content"
+            spellcheck="true"
+          ></div>
+        </div>
+      </main>
     </section>
 
-    <!-- Test Cases view -->
-    <section id="view-testcases" class="view">
+    <!-- =============================================================== -->
+    <!-- Test Cases view                                                 -->
+    <!-- =============================================================== -->
+    <section id="view-testcases" class="view hidden">
       <aside class="sidebar">
         <div class="sidebar__header">
           <span class="sidebar__title">Sections</span>
-          <button id="btnAddSection" class="btn-icon" title="Add section" aria-label="Add section">+</button>
+          <div class="sidebar__header-actions">
+            <button id="btnRenameSectionIcon" class="btn-icon" title="Rename section" aria-label="Rename section" disabled>✎</button>
+            <button id="btnDeleteSectionIcon" class="btn-icon" title="Delete sections" aria-label="Delete sections">🗑</button>
+            <button id="btnAddSection" class="btn-icon" title="Add section" aria-label="Add section">+</button>
+          </div>
         </div>
         <ul id="sectionList" class="section-list" role="listbox"></ul>
         <p id="sectionEmpty" class="sidebar__empty hidden">
           No sections yet. Click + to add one.
         </p>
+
+        <div id="sectionDeleteBar" class="bulk-bar hidden" role="region" aria-label="Section delete selection">
+          <span id="sectionDeleteCount" class="bulk-bar__count">0 selected</span>
+          <div class="bulk-bar__actions">
+            <button id="btnCancelSectionDelete" type="button" class="btn btn-sm">Cancel</button>
+            <button id="btnConfirmSectionDelete" type="button" class="btn btn-sm btn-danger" disabled>Delete</button>
+          </div>
+        </div>
       </aside>
 
       <main class="content">
@@ -89,10 +258,14 @@
             <button id="btnAddTc" class="btn btn-primary" disabled>
               + Add Test Case
             </button>
-            <button id="btnRenameSection" class="btn" disabled>Rename</button>
-            <button id="btnDeleteSection" class="btn btn-danger" disabled>
-              Delete section
-            </button>
+          </div>
+        </div>
+
+        <div id="tcBulkBar" class="bulk-bar bulk-bar--tc hidden" role="region" aria-label="Bulk test case actions">
+          <span id="tcBulkCount" class="bulk-bar__count">0 selected</span>
+          <div class="bulk-bar__actions">
+            <button id="btnClearTcSelection" type="button" class="btn btn-sm">Clear</button>
+            <button id="btnBulkDeleteTc" type="button" class="btn btn-sm btn-danger">Delete selected</button>
           </div>
         </div>
 
@@ -100,6 +273,9 @@
           <table id="tcTable">
             <thead>
               <tr>
+                <th class="col-check">
+                  <input id="tcSelectAll" type="checkbox" aria-label="Select all test cases" />
+                </th>
                 <th class="col-id">ID</th>
                 <th>Title</th>
                 <th class="col-module">Module</th>
@@ -119,7 +295,100 @@
       </main>
     </section>
 
-    <!-- Test Case Modal -->
+    <!-- =============================================================== -->
+    <!-- Jira Tickets view                                               -->
+    <!-- =============================================================== -->
+    <section id="view-jira" class="view hidden">
+      <aside class="sidebar">
+        <div class="sidebar__header">
+          <span class="sidebar__title">Groups</span>
+          <div class="sidebar__header-actions">
+            <button id="btnRenameJiraSectionIcon" class="btn-icon" title="Rename group" aria-label="Rename group" disabled>✎</button>
+            <button id="btnDeleteJiraSectionIcon" class="btn-icon" title="Delete groups" aria-label="Delete groups">🗑</button>
+            <button id="btnAddJiraSection" class="btn-icon" title="Add group" aria-label="Add group">+</button>
+          </div>
+        </div>
+        <ul id="jiraSectionList" class="section-list" role="listbox"></ul>
+        <p id="jiraSectionEmpty" class="sidebar__empty hidden">
+          No groups yet. Click + to add one.
+        </p>
+
+        <div id="jiraSectionDeleteBar" class="bulk-bar hidden" role="region" aria-label="Group delete selection">
+          <span id="jiraSectionDeleteCount" class="bulk-bar__count">0 selected</span>
+          <div class="bulk-bar__actions">
+            <button id="btnCancelJiraSectionDelete" type="button" class="btn btn-sm">Cancel</button>
+            <button id="btnConfirmJiraSectionDelete" type="button" class="btn btn-sm btn-danger" disabled>Delete</button>
+          </div>
+        </div>
+      </aside>
+
+      <main class="content">
+        <div class="content__header">
+          <div class="content__title">
+            <h2 id="jiraSectionTitle">All tickets</h2>
+            <span id="jiraSectionMeta" class="content__meta"></span>
+          </div>
+          <div class="content__actions">
+            <input
+              id="jiraSearch"
+              type="search"
+              placeholder="Search key or summary..."
+              autocomplete="off"
+            />
+            <button id="btnJiraGenerate" class="btn btn-ai hidden" disabled title="Generate a test case from the selected JIRA tickets">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 3l2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3z"></path>
+              </svg>
+              Generate test case
+            </button>
+            <button id="btnJiraExtract" class="btn btn-primary">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 5v14"></path>
+                <path d="M5 12h14"></path>
+              </svg>
+              Extract from JIRA
+            </button>
+          </div>
+        </div>
+
+        <div id="jiraBulkBar" class="bulk-bar bulk-bar--tc hidden" role="region" aria-label="Bulk JIRA ticket actions">
+          <span id="jiraBulkCount" class="bulk-bar__count">0 selected</span>
+          <div class="bulk-bar__actions">
+            <div class="move-menu">
+              <button id="btnJiraMoveMenu" type="button" class="btn btn-sm" aria-haspopup="true" aria-expanded="false">Combine into group ▾</button>
+              <ul id="jiraMoveMenu" class="auto-menu hidden" role="listbox"></ul>
+            </div>
+            <button id="btnClearJiraSelection" type="button" class="btn btn-sm">Clear</button>
+            <button id="btnJiraBulkDelete" type="button" class="btn btn-sm btn-danger">Delete</button>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table id="jiraTable">
+            <thead>
+              <tr>
+                <th class="col-check">
+                  <input id="jiraSelectAll" type="checkbox" aria-label="Select all tickets" />
+                </th>
+                <th class="col-id">Jira ID</th>
+                <th>Summary</th>
+                <th class="col-group">Group</th>
+                <th class="col-tc">Test Case</th>
+                <th class="col-tc-id">ID</th>
+                <th class="col-actions">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="jiraBody"></tbody>
+          </table>
+          <p id="jiraEmptyState" class="empty hidden">No tickets yet. Click <strong>Extract from JIRA</strong> to pull some in.</p>
+          <p id="jiraLoadState" class="empty hidden">Loading...</p>
+        </div>
+      </main>
+    </section>
+
+    <!-- =============================================================== -->
+    <!-- Test Case Modal                                                 -->
+    <!-- =============================================================== -->
     <div id="tcModal" class="modal hidden" aria-hidden="true">
       <div class="modal__content" role="dialog" aria-modal="true">
         <h3 id="tcModalTitle">Add Test Case</h3>
@@ -165,6 +434,14 @@
             Description
             <textarea name="description" rows="2" placeholder="Short summary (optional)"></textarea>
           </label>
+          <label id="tcSectionPickerLabel" class="hidden">
+            Test case section
+            <select id="tcSectionPicker" name="sectionIdPicker"></select>
+          </label>
+          <label>
+            Source <small>(JIRA ticket links, comma-separated)</small>
+            <input name="sources" type="text" placeholder="https://yourcompany.atlassian.net/browse/BUIL-14592" autocomplete="off" />
+          </label>
           <label>
             Steps <small>(one per line, optional)</small>
             <textarea name="steps" rows="5"></textarea>
@@ -184,7 +461,9 @@
       </div>
     </div>
 
-    <!-- Section Modal (add/rename) -->
+    <!-- =============================================================== -->
+    <!-- Section Modal (add / rename)                                    -->
+    <!-- =============================================================== -->
     <div id="sectionModal" class="modal hidden" aria-hidden="true">
       <div class="modal__content modal__content--sm" role="dialog" aria-modal="true">
         <h3 id="sectionModalTitle">Add Section</h3>
@@ -194,6 +473,18 @@
             Section name
             <input name="name" required maxlength="80" placeholder="e.g. Authentication" />
           </label>
+          <label>
+            Section level
+            <select id="sectionLevel" name="level">
+              <option value="0" selected>Main section</option>
+              <option value="1">Sub-section</option>
+              <option value="2">Sub of sub-section</option>
+            </select>
+          </label>
+          <label id="sectionParentLabel" class="hidden">
+            Parent section
+            <select id="sectionParent" name="parentId"></select>
+          </label>
           <div class="modal__actions">
             <div></div>
             <div class="modal__actions-right">
@@ -202,6 +493,199 @@
             </div>
           </div>
         </form>
+      </div>
+    </div>
+
+    <!-- =============================================================== -->
+    <!-- Documentation Section Modal (add / rename)                      -->
+    <!-- =============================================================== -->
+    <div id="docSectionModal" class="modal hidden" aria-hidden="true">
+      <div class="modal__content modal__content--sm" role="dialog" aria-modal="true">
+        <h3 id="docSectionModalTitle">Add Section</h3>
+        <form id="docSectionForm">
+          <input type="hidden" name="id" />
+          <label>
+            Section name
+            <input name="name" required maxlength="120" placeholder="e.g. Onboarding" />
+          </label>
+          <fieldset class="doc-type-fieldset" id="docSectionTypeFieldset">
+            <legend>Type</legend>
+            <label class="doc-type-option">
+              <input type="radio" name="type" value="main" checked />
+              <span>Main page</span>
+            </label>
+            <label class="doc-type-option">
+              <input type="radio" name="type" value="sub" />
+              <span>Sub page of…</span>
+            </label>
+          </fieldset>
+          <label id="docSectionParentLabel" class="hidden">
+            Parent page
+            <select name="parentId" id="docSectionParent"></select>
+          </label>
+          <div class="modal__actions">
+            <div></div>
+            <div class="modal__actions-right">
+              <button type="button" class="btn" data-close-modal>Cancel</button>
+              <button type="submit" id="btnSaveDocSection" class="btn btn-primary">Save</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- =============================================================== -->
+    <!-- Documentation AI Generate Modal                                 -->
+    <!-- =============================================================== -->
+    <div id="docGenerateModal" class="modal hidden" aria-hidden="true">
+      <div class="modal__content" role="dialog" aria-modal="true">
+        <h3>
+          <span class="ai-title">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 3l2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3z"></path>
+            </svg>
+            Generate documentation with AI
+          </span>
+        </h3>
+        <p class="modal__lede">
+          Provide a public link to a README, Google Doc, Confluence page, or
+          any web page. We'll draft a new documentation section you can
+          review and edit before publishing.
+        </p>
+        <form id="docGenerateForm">
+          <label>
+            Source URL
+            <input
+              name="url"
+              type="url"
+              placeholder="https://github.com/org/repo/blob/main/README.md"
+              autocomplete="off"
+            />
+          </label>
+          <label>
+            Or paste the source text <small>(optional — use for auth-protected pages)</small>
+            <textarea
+              name="text"
+              rows="4"
+              placeholder="Paste the content here if the URL is behind a login…"
+            ></textarea>
+          </label>
+          <label>
+            Focus / notes for the draft <small>(optional)</small>
+            <textarea
+              name="hint"
+              rows="2"
+              placeholder="e.g. Keep the commands and env variables; skip the marketing intro."
+            ></textarea>
+          </label>
+          <p id="docGenerateError" class="form-error hidden" role="alert"></p>
+          <div class="modal__actions">
+            <div></div>
+            <div class="modal__actions-right">
+              <button type="button" class="btn" data-close-modal>Cancel</button>
+              <button type="submit" id="btnDocGenerateSubmit" class="btn btn-primary btn-ai-submit">
+                <span class="ai-spinner hidden" aria-hidden="true"></span>
+                <span class="ai-btn-label">Generate draft</span>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- =============================================================== -->
+    <!-- JIRA Section Modal (add / rename)                               -->
+    <!-- =============================================================== -->
+    <div id="jiraSectionModal" class="modal hidden" aria-hidden="true">
+      <div class="modal__content modal__content--sm" role="dialog" aria-modal="true">
+        <h3 id="jiraSectionModalTitle">Add Group</h3>
+        <form id="jiraSectionForm">
+          <input type="hidden" name="id" />
+          <label>
+            Group name
+            <input name="name" required maxlength="80" placeholder="e.g. Reports Bugs" />
+          </label>
+          <div class="modal__actions">
+            <div></div>
+            <div class="modal__actions-right">
+              <button type="button" class="btn" data-close-modal>Cancel</button>
+              <button type="submit" id="btnSaveJiraSection" class="btn btn-primary">Save</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- =============================================================== -->
+    <!-- JIRA Extract Modal                                              -->
+    <!-- =============================================================== -->
+    <div id="jiraExtractModal" class="modal hidden" aria-hidden="true">
+      <div class="modal__content modal__content--sm" role="dialog" aria-modal="true">
+        <h3>
+          <span class="ai-title">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+              <path d="M3 10h18"></path>
+            </svg>
+            Extract tickets from JIRA
+          </span>
+        </h3>
+        <p class="modal__lede">
+          Provide a JQL query (or a saved filter) and we'll fetch matching
+          tickets and add them to the list below.
+        </p>
+        <form id="jiraExtractForm">
+          <label>
+            JQL query
+            <textarea
+              name="jql"
+              rows="3"
+              required
+              placeholder='project = BUIL AND status = "Ready for Staging" ORDER BY priority DESC'
+            ></textarea>
+          </label>
+          <div class="grid-3">
+            <label>
+              Assign to group
+              <select id="jiraExtractSection" name="sectionId">
+                <option value="">— Unassigned —</option>
+              </select>
+            </label>
+            <label>
+              Max results
+              <input name="maxResults" type="number" min="1" max="100" value="50" />
+            </label>
+            <div></div>
+          </div>
+          <p id="jiraExtractError" class="form-error hidden" role="alert"></p>
+          <div class="modal__actions">
+            <div></div>
+            <div class="modal__actions-right">
+              <button type="button" class="btn" data-close-modal>Cancel</button>
+              <button type="submit" id="btnJiraExtractSubmit" class="btn btn-primary btn-ai-submit">
+                <span class="ai-spinner hidden" aria-hidden="true"></span>
+                <span class="ai-btn-label">Extract</span>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- =============================================================== -->
+    <!-- Confirm Modal (shared)                                          -->
+    <!-- =============================================================== -->
+    <div id="confirmModal" class="modal hidden" aria-hidden="true">
+      <div class="modal__content modal__content--sm" role="alertdialog" aria-modal="true">
+        <h3 id="confirmTitle">Confirm</h3>
+        <p id="confirmMessage" class="modal__lede"></p>
+        <div class="modal__actions">
+          <div></div>
+          <div class="modal__actions-right">
+            <button type="button" id="btnConfirmCancel" class="btn">Cancel</button>
+            <button type="button" id="btnConfirmOk" class="btn btn-danger">Delete</button>
+          </div>
+        </div>
       </div>
     </div>
 

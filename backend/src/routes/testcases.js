@@ -7,6 +7,7 @@ import {
   validateTestCase,
   sanitizeTestCase,
   nextTestCaseId,
+  UNDEFINED_SECTION_ID,
 } from "../utils/validate.js";
 import { requireApiKey } from "../middleware/auth.js";
 
@@ -30,7 +31,8 @@ router.post("/", requireApiKey, async (req, res, next) => {
 
     const { json, sha } = await readTestCasesFile();
     if (!json.sections.some((s) => s.id === clean.sectionId)) {
-      return res.status(400).json({ error: "Unknown sectionId" });
+      // Fall back to the Undefined catch-all section instead of 400-ing.
+      clean.sectionId = UNDEFINED_SECTION_ID;
     }
 
     const now = new Date().toISOString();
@@ -64,7 +66,7 @@ router.put("/:id", requireApiKey, async (req, res, next) => {
     const idx = json.testCases.findIndex((t) => t.id === req.params.id);
     if (idx === -1) return res.status(404).json({ error: "Not found" });
     if (!json.sections.some((s) => s.id === clean.sectionId)) {
-      return res.status(400).json({ error: "Unknown sectionId" });
+      clean.sectionId = UNDEFINED_SECTION_ID;
     }
 
     const now = new Date().toISOString();
