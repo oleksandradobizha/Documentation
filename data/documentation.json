@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-04-23T06:46:52.435Z",
+  "updatedAt": "2026-04-23T17:26:12.976Z",
   "sections": [
     {
       "id": "doc-001",
@@ -35,6 +35,16 @@
       "isDraft": true,
       "createdAt": "2026-04-23T06:46:21.046Z",
       "updatedAt": "2026-04-23T06:46:52.435Z"
+    },
+    {
+      "id": "doc-005",
+      "name": "Jira Portal",
+      "order": 4,
+      "parentId": null,
+      "content": "<h1>Jira Portal</h1><p>This section provides access to the Simuwatt Jira instance for tracking issues and workflows.</p><h2>Access Link</h2><div class=\"doc-cards\"><div class=\"doc-card\"><strong class=\"doc-card__title\">Simuwatt Jira</strong><span class=\"doc-card__body\"><a href=\"https://simuwatt.atlassian.net/issues?filter=10862&selectedIssue=BUIL-14726\">Jira Issues Filter</a></span></div></div>",
+      "isDraft": true,
+      "createdAt": "2026-04-23T17:26:12.976Z",
+      "updatedAt": "2026-04-23T17:26:12.976Z"
     }
   ]
 }
