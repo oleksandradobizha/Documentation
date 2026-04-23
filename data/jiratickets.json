@@ -1,7 +1,14 @@
 {
   "version": 1,
-  "updatedAt": "2026-04-23T02:34:09.824Z",
-  "sections": [],
+  "updatedAt": "2026-04-23T02:35:12.577Z",
+  "sections": [
+    {
+      "id": "jsec-001",
+      "name": "Analytics",
+      "order": 0,
+      "createdAt": "2026-04-23T02:35:12.577Z"
+    }
+  ],
   "tickets": [
     {
       "key": "BUIL-14592",
