@@ -83,9 +83,28 @@
             <button id="btnAddDocSection" class="btn-icon" title="Add section" aria-label="Add section">+</button>
           </div>
         </div>
+        <div class="sidebar__search">
+          <input
+            id="docSearch"
+            type="search"
+            placeholder="Search docs..."
+            autocomplete="off"
+            aria-label="Search documentation"
+          />
+          <button
+            id="btnClearDocSearch"
+            type="button"
+            class="sidebar__search-clear hidden"
+            aria-label="Clear search"
+            title="Clear search"
+          >×</button>
+        </div>
         <ul id="docSectionList" class="section-list" role="listbox"></ul>
         <p id="docSectionEmpty" class="sidebar__empty hidden">
           No sections yet. Click + to add one.
+        </p>
+        <p id="docSearchEmpty" class="sidebar__empty hidden">
+          No results.
         </p>
       </aside>
 
@@ -348,6 +367,15 @@
                 <path d="M12 3l2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3z"></path>
               </svg>
               Generate test case
+            </button>
+            <button id="btnJiraHowTo" class="btn btn-ai hidden" disabled title="Generate a How-To documentation draft from the selected JIRA tickets">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                <path d="M9 7h7"></path>
+                <path d="M9 11h7"></path>
+              </svg>
+              Generate How-To
             </button>
             <button id="btnJiraExtract" class="btn btn-primary">
               <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">

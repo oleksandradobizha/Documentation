@@ -30,6 +30,7 @@ const DEFAULT_MODEL = "gemini-2.5-flash";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DEFAULT_PROMPT_PATH = resolve(__dirname, "../prompts/testcase.md");
 const DEFAULT_DOC_PROMPT_PATH = resolve(__dirname, "../prompts/docsection.md");
+const DEFAULT_HOWTO_PROMPT_PATH = resolve(__dirname, "../prompts/howto.md");
 
 // Minimal fallback in case the prompt file is missing / unreadable. The real
 // persona + rules live in backend/src/prompts/testcase.md — keep this short.
@@ -38,6 +39,9 @@ const FALLBACK_SYSTEM_PROMPT =
 
 const FALLBACK_DOC_SYSTEM_PROMPT =
   "You are a senior QA engineer curating internal QA documentation. Given a source document, produce a concise HTML fragment (headings, lists, links, tables) suitable for the QA portal. Return JSON with {title, content}.";
+
+const FALLBACK_HOWTO_SYSTEM_PROMPT =
+  "You are a senior QA engineer. Given one or more JIRA tickets, draft a concise how-to testing guide (HTML fragment) that teaches another QA engineer how to exercise the feature end-to-end: summary, preconditions, steps, expected behavior, edge cases. Return JSON with {title, content}.";
 
 function loadPromptFile(envInline, envPath, defaultPath, fallback, label) {
   const inline = process.env[envInline];
@@ -76,6 +80,13 @@ const DOC_SYSTEM_PROMPT = loadPromptFile(
   DEFAULT_DOC_PROMPT_PATH,
   FALLBACK_DOC_SYSTEM_PROMPT,
   "docsection"
+);
+const HOWTO_SYSTEM_PROMPT = loadPromptFile(
+  "GEMINI_HOWTO_SYSTEM_PROMPT",
+  "GEMINI_HOWTO_SYSTEM_PROMPT_PATH",
+  DEFAULT_HOWTO_PROMPT_PATH,
+  FALLBACK_HOWTO_SYSTEM_PROMPT,
+  "howto"
 );
 
 function httpError(status, message) {
@@ -594,6 +605,162 @@ export async function draftDocSectionFromSource({
         }
       })()}`
     : "Draft section";
+
+  const draft = normalizeDocDraft(parsed, { fallbackTitle });
+  if (!draft.content) {
+    throw httpError(502, "AI returned an empty draft. Try again.");
+  }
+  return draft;
+}
+
+/* ========================================================================
+ * How-To article drafting from JIRA tickets
+ * ====================================================================== */
+
+function buildHowToUserPrompt(issues) {
+  const list = Array.isArray(issues) ? issues : [issues];
+  const isMulti = list.length > 1;
+
+  const task = isMulti
+    ? `Draft ONE cohesive "how to test" article that covers the combined scope of the JIRA tickets below. Synthesise the tickets into a single teaching guide — do not produce N independent articles.`
+    : `Draft ONE "how to test" article based on the JIRA ticket below.`;
+
+  const body = list.map(formatIssueBlock).join("\n\n---\n\n");
+
+  const linkList = list
+    .map((i) => `- ${i.key} — ${i.summary || "(no summary)"} — ${i.url}`)
+    .join("\n");
+
+  return `${task}
+
+${body}
+
+Ticket links (use these exact URLs in the Source Tickets section):
+${linkList}
+
+Return ONLY a JSON object with exactly these keys:
+{
+  "title": "Short descriptive article name (<= 80 chars, Title Case, starts with 'How to …' or 'Testing …').",
+  "content": "HTML fragment following the structure and formatting rules from the system prompt."
+}
+
+Reminders:
+- Follow the required article structure from the system prompt (Summary, Source Tickets, Why This Matters, Preconditions, How to Test, Expected Behavior, Edge Cases & Negative Scenarios, Open Questions).
+- Do not invent URLs, roles, flags, or behavior that the tickets don't mention.
+- Keep every JIRA URL exactly as provided above.${
+    isMulti
+      ? "\n- Multiple tickets provided — unify them into one coherent how-to."
+      : ""
+  }`;
+}
+
+const HOWTO_RESPONSE_SCHEMA = {
+  type: "object",
+  properties: {
+    title: { type: "string" },
+    content: { type: "string" },
+  },
+  required: ["title", "content"],
+};
+
+/**
+ * Ask Gemini to draft a "how to test" doc article from one or more JIRA
+ * issues. Returns `{ title, content }` — an HTML fragment suitable for the
+ * rich-text doc editor. The caller is responsible for creating the actual
+ * doc section (typically as `isDraft: true`).
+ */
+export async function draftHowToFromIssues(issues) {
+  const list = Array.isArray(issues) ? issues : [issues];
+  if (!list.length) {
+    throw httpError(400, "At least one JIRA ticket is required.");
+  }
+  if (!isAiConfigured()) {
+    throw httpError(
+      500,
+      "AI is not configured. Set GEMINI_API_KEY in backend/.env (get a free key at https://aistudio.google.com/apikey)."
+    );
+  }
+
+  const model = process.env.GEMINI_MODEL || DEFAULT_MODEL;
+  const url = `${GEMINI_BASE}/models/${encodeURIComponent(
+    model
+  )}:generateContent?key=${encodeURIComponent(process.env.GEMINI_API_KEY)}`;
+
+  const res = await fetch(url, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      systemInstruction: {
+        role: "system",
+        parts: [{ text: HOWTO_SYSTEM_PROMPT }],
+      },
+      contents: [
+        {
+          role: "user",
+          parts: [{ text: buildHowToUserPrompt(list) }],
+        },
+      ],
+      generationConfig: {
+        temperature: 0.3,
+        maxOutputTokens: 4096,
+        responseMimeType: "application/json",
+        responseSchema: HOWTO_RESPONSE_SCHEMA,
+      },
+    }),
+  });
+
+  if (res.status === 400) {
+    const body = await res.text().catch(() => "");
+    throw httpError(
+      400,
+      `Gemini rejected the request. Check GEMINI_API_KEY / GEMINI_MODEL in backend/.env. ${body.slice(
+        0,
+        200
+      )}`
+    );
+  }
+  if (res.status === 401 || res.status === 403) {
+    throw httpError(
+      res.status,
+      "Gemini rejected the API key. Check GEMINI_API_KEY in backend/.env."
+    );
+  }
+  if (res.status === 429) {
+    throw httpError(
+      429,
+      "Gemini rate limit hit (free tier). Wait a minute and try again."
+    );
+  }
+  if (!res.ok) {
+    const body = await res.text().catch(() => "");
+    throw httpError(
+      res.status,
+      `Gemini error ${res.status}: ${body.slice(0, 200)}`
+    );
+  }
+
+  const data = await res.json();
+  const responseText =
+    data?.candidates?.[0]?.content?.parts
+      ?.filter((p) => typeof p?.text === "string")
+      .map((p) => p.text)
+      .join("\n") || "";
+
+  const parsed = extractJson(responseText);
+  if (!parsed) {
+    throw httpError(
+      502,
+      "AI response could not be parsed as JSON. Try again."
+    );
+  }
+
+  const keysFallback = list
+    .map((i) => i.key)
+    .filter(Boolean)
+    .join(", ");
+  const fallbackTitle = keysFallback
+    ? `How to Test ${keysFallback}`
+    : "How-To Draft";
 
   const draft = normalizeDocDraft(parsed, { fallbackTitle });
   if (!draft.content) {
