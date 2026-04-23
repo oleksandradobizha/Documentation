@@ -1,0 +1,19 @@
+{
+  "tickets": [
+    {
+      "key": "BUIL-14651",
+      "url": "https://simuwatt.atlassian.net/browse/BUIL-14651",
+      "summary": "Scroll is missing in Portfolio Manager Settings dialog",
+      "issueType": "Bug",
+      "priority": "Lowest",
+      "status": "Ready for Staging",
+      "labels": [],
+      "components": [
+        "Portfolio: UI"
+      ],
+      "sectionId": null,
+      "createdAt": "2026-04-23T03:59:30.247Z",
+      "updatedAt": "2026-04-23T17:44:31.777Z"
+    }
+  ]
+}
