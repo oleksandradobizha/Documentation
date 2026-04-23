@@ -1,0 +1,34 @@
+{
+  "version": 2,
+  "updatedAt": "2026-04-23T06:42:12.407Z",
+  "sections": [
+    {
+      "id": "sec-undefined",
+      "name": "Undefined",
+      "parentId": null,
+      "order": -1,
+      "createdAt": "2026-04-20T00:00:00Z"
+    },
+    {
+      "id": "sec-002",
+      "name": "Projects & Buildings",
+      "parentId": null,
+      "order": 1,
+      "createdAt": "2026-04-20T09:00:00Z"
+    },
+    {
+      "id": "sec-003",
+      "name": "Proposal",
+      "parentId": null,
+      "order": 2,
+      "createdAt": "2026-04-22T21:04:41.282Z"
+    },
+    {
+      "id": "sec-004",
+      "name": "sub-section",
+      "parentId": "sec-003",
+      "order": 3,
+      "createdAt": "2026-04-23T06:42:12.407Z"
+    }
+  ]
+}

@@ -1,38 +1,5 @@
 {
-  "version": 2,
-  "updatedAt": "2026-04-23T06:42:12.407Z",
-  "sections": [
-    {
-      "id": "sec-undefined",
-      "name": "Undefined",
-      "parentId": null,
-      "order": -1,
-      "createdAt": "2026-04-20T00:00:00Z"
-    },
-    {
-      "id": "sec-002",
-      "name": "Projects & Buildings",
-      "parentId": null,
-      "order": 1,
-      "createdAt": "2026-04-20T09:00:00Z",
-      "parentId": null
-    },
-    {
-      "id": "sec-003",
-      "name": "Proposal",
-      "parentId": null,
-      "order": 2,
-      "createdAt": "2026-04-22T21:04:41.282Z",
-      "parentId": null
-    },
-    {
-      "id": "sec-004",
-      "name": "sub-section",
-      "parentId": "sec-003",
-      "order": 3,
-      "createdAt": "2026-04-23T06:42:12.407Z"
-    }
-  ],
+  "sectionId": "sec-002",
   "testCases": [
     {
       "id": "TC-0004",
@@ -50,20 +17,6 @@
       "expectedResult": "Import finishes with a success toast and imported buildings appear.",
       "createdAt": "2026-04-20T09:15:00Z",
       "updatedAt": "2026-04-22T21:35:35.603Z"
-    },
-    {
-      "id": "TC-0005",
-      "sectionId": "sec-003",
-      "title": "1233",
-      "module": "Project",
-      "priority": "High",
-      "automationStatus": "In Progress",
-      "description": "",
-      "steps": [],
-      "expectedResult": "",
-      "createdAt": "2026-04-22T21:18:34.773Z",
-      "updatedAt": "2026-04-23T06:41:24.306Z",
-      "sources": []
     },
     {
       "id": "TC-0006",
@@ -107,20 +60,6 @@
       ],
       "createdAt": "2026-04-23T02:36:10.451Z",
       "updatedAt": "2026-04-23T02:36:10.451Z"
-    },
-    {
-      "id": "TC-0008",
-      "sectionId": "sec-undefined",
-      "title": "Test Case 1",
-      "module": "Project",
-      "priority": "High",
-      "automationStatus": "Not Started",
-      "description": "",
-      "steps": [],
-      "expectedResult": "",
-      "sources": [],
-      "createdAt": "2026-04-23T06:41:42.862Z",
-      "updatedAt": "2026-04-23T06:41:42.862Z"
     }
   ]
 }
