@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-04-23T17:26:33.279Z",
+  "updatedAt": "2026-04-23T17:33:13.077Z",
   "sections": [
     {
       "id": "doc-001",
@@ -35,6 +35,15 @@
       "isDraft": true,
       "createdAt": "2026-04-23T06:46:21.046Z",
       "updatedAt": "2026-04-23T06:46:52.435Z"
+    },
+    {
+      "id": "doc-005",
+      "name": "HowTo",
+      "order": 4,
+      "parentId": null,
+      "content": "",
+      "createdAt": "2026-04-23T17:33:13.077Z",
+      "updatedAt": "2026-04-23T17:33:13.077Z"
     }
   ]
 }
