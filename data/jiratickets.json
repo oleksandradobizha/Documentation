@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-04-23T02:35:30.895Z",
+  "updatedAt": "2026-04-23T03:59:30.247Z",
   "sections": [
     {
       "id": "jsec-001",
@@ -24,6 +24,21 @@
       "sectionId": "jsec-001",
       "createdAt": "2026-04-23T02:34:09.824Z",
       "updatedAt": "2026-04-23T02:35:30.895Z"
+    },
+    {
+      "key": "BUIL-14651",
+      "url": "https://simuwatt.atlassian.net/browse/BUIL-14651",
+      "summary": "Scroll is missing in Portfolio Manager Settings dialog",
+      "issueType": "Bug",
+      "priority": "Lowest",
+      "status": "Ready for Staging",
+      "labels": [],
+      "components": [
+        "Portfolio: UI"
+      ],
+      "sectionId": "jsec-001",
+      "createdAt": "2026-04-23T03:59:30.247Z",
+      "updatedAt": "2026-04-23T03:59:30.247Z"
     }
   ]
 }
