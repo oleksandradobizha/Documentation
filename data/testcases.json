@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": "2026-04-23T02:36:10.451Z",
+  "updatedAt": "2026-04-23T02:37:09.056Z",
   "sections": [
     {
       "id": "sec-002",
@@ -10,7 +10,7 @@
     },
     {
       "id": "sec-003",
-      "name": "ddd",
+      "name": "Proposal",
       "order": 2,
       "createdAt": "2026-04-22T21:04:41.282Z"
     }
