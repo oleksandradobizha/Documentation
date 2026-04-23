@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-04-23T06:46:21.046Z",
+  "updatedAt": "2026-04-23T06:46:52.435Z",
   "sections": [
     {
       "id": "doc-001",
@@ -31,10 +31,10 @@
       "name": "Jira Source Content Unavailable",
       "order": 3,
       "parentId": null,
-      "content": "<h1>Jira Source Content Unavailable</h1><p>The provided source content for Jira was too sparse to generate a meaningful documentation section. It appears to be a link to a specific Jira ticket rather than a general reference document.</p>",
+      "content": "<h1>Jira Source Content Unavailable</h1><p>The provided source content for Jira was too sparse to generate a meaningful documentation section. It appears to be a link to a specific Jira ticket rather than a general reference document</p>",
       "isDraft": true,
       "createdAt": "2026-04-23T06:46:21.046Z",
-      "updatedAt": "2026-04-23T06:46:21.046Z"
+      "updatedAt": "2026-04-23T06:46:52.435Z"
     }
   ]
 }
