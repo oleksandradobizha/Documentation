@@ -14,6 +14,21 @@
       "sectionId": null,
       "createdAt": "2026-04-23T03:59:30.247Z",
       "updatedAt": "2026-04-23T17:44:31.777Z"
+    },
+    {
+      "key": "BUIL-13381",
+      "url": "https://simuwatt.atlassian.net/browse/BUIL-13381",
+      "summary": "EUB - Building - Custom Baselines - FE",
+      "issueType": "Story",
+      "priority": "High",
+      "status": "Ready for QA",
+      "labels": [],
+      "components": [
+        "Overview UI"
+      ],
+      "sectionId": null,
+      "createdAt": "2026-04-23T21:36:34.492Z",
+      "updatedAt": "2026-04-23T21:36:34.492Z"
     }
   ]
 }
