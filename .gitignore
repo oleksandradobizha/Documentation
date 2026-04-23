@@ -16,3 +16,8 @@ __pycache__/
 # Local builds / logs
 node_modules/
 *.log
+
+# Secrets - never commit env files anywhere in the repo
+.env
+.env.*
+!.env.example

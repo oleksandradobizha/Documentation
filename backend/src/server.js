@@ -3,6 +3,9 @@ import cors from "cors";
 import "dotenv/config";
 import testcasesRouter from "./routes/testcases.js";
 import sectionsRouter from "./routes/sections.js";
+import docsRouter from "./routes/docs.js";
+import aiRouter from "./routes/ai.js";
+import jiraRouter from "./routes/jira.js";
 
 const app = express();
 
@@ -39,6 +42,9 @@ app.get("/health", (_req, res) => res.json({ ok: true }));
 
 app.use("/api/testcases", testcasesRouter);
 app.use("/api/sections", sectionsRouter);
+app.use("/api/docs", docsRouter);
+app.use("/api/ai", aiRouter);
+app.use("/api/jira", jiraRouter);
 
 app.use((err, _req, res, _next) => {
   // eslint-disable-next-line no-console
