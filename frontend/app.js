@@ -122,6 +122,7 @@
     btnSaveDoc: $("btnSaveDoc"),
     btnEditDoc: $("btnEditDoc"),
     btnCancelDoc: $("btnCancelDoc"),
+    btnDownloadDocPdf: $("btnDownloadDocPdf"),
     docBlockStyle: $("docBlockStyle"),
     docFontFamily: $("docFontFamily"),
     docFontSize: $("docFontSize"),
@@ -1715,6 +1716,11 @@
     els.btnSaveDoc.classList.toggle("hidden", !editing);
     // Save button is disabled unless dirty
     els.btnSaveDoc.disabled = !state.docs.dirty;
+    // Download PDF is available in read-only mode when a section is loaded
+    if (els.btnDownloadDocPdf) {
+      els.btnDownloadDocPdf.classList.toggle("hidden", editing);
+      els.btnDownloadDocPdf.disabled = !hasSection;
+    }
     // Save status is only meaningful while editing
     if (!editing) setDocSaveStatus("idle");
   }
@@ -2552,6 +2558,174 @@
   els.btnSaveDoc.addEventListener("click", () => saveActiveDoc(false));
   els.btnEditDoc.addEventListener("click", enterDocEditMode);
   els.btnCancelDoc.addEventListener("click", cancelDocEdit);
+  els.btnDownloadDocPdf?.addEventListener("click", downloadActiveDocAsPdf);
+
+  // ---------- Download the current doc section as a PDF ----------
+  // Uses the browser's native "Print to PDF" via a hidden same-origin
+  // iframe. This avoids pop-up blockers and needs no external library.
+  function downloadActiveDocAsPdf() {
+    const s = currentDocSection();
+    if (!s) {
+      toast("Select a section first.", true);
+      return;
+    }
+    const title = s.name || "Documentation";
+    const updated = s.updatedAt
+      ? `Last updated ${new Date(s.updatedAt).toLocaleString()}`
+      : "";
+    const content = s.content || "";
+    const safeTitle = escapeHtml(title);
+    const safeUpdated = escapeHtml(updated);
+
+    const html = `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>${safeTitle}</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --text: #0f172a;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+    --surface-2: #f8fafc;
+    --primary: #2563eb;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    color: var(--text);
+    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      "Helvetica Neue", Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.55;
+    background: #fff;
+  }
+  .pdf-page { padding: 32px 36px; max-width: 820px; margin: 0 auto; }
+  .pdf-header { border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 20px; }
+  .pdf-header h1 { margin: 0 0 4px; font-size: 22px; font-weight: 700; }
+  .pdf-header .pdf-meta { color: var(--text-muted); font-size: 12px; }
+  .pdf-content h1 { font-size: 20px; font-weight: 700; margin: 22px 0 10px; }
+  .pdf-content h2 { font-size: 17px; font-weight: 600; margin: 20px 0 8px; }
+  .pdf-content h3 { font-size: 15px; font-weight: 600; margin: 16px 0 6px; }
+  .pdf-content p  { margin: 0 0 12px; }
+  .pdf-content ul, .pdf-content ol { padding-left: 22px; margin: 8px 0 14px; }
+  .pdf-content a { color: var(--primary); }
+  .pdf-content code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    background: var(--surface-2);
+    padding: 1px 4px;
+    border-radius: 4px;
+    font-size: 12.5px;
+  }
+  .pdf-content pre {
+    background: var(--surface-2);
+    padding: 12px;
+    border-radius: 6px;
+    overflow: auto;
+    font-size: 12.5px;
+    line-height: 1.45;
+  }
+  .pdf-content blockquote {
+    margin: 10px 0;
+    padding: 6px 12px;
+    border-left: 3px solid var(--border);
+    color: var(--text-muted);
+  }
+  .pdf-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0 16px;
+    font-size: 13px;
+  }
+  .pdf-content th, .pdf-content td {
+    border: 1px solid var(--border);
+    padding: 6px 10px;
+    vertical-align: top;
+    text-align: left;
+  }
+  .pdf-content th { background: var(--surface-2); font-weight: 600; }
+  .pdf-content img { max-width: 100%; height: auto; }
+  .pdf-content .doc-cards,
+  .pdf-content [data-doc-block="cards"] {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    margin: 12px 0;
+  }
+  .pdf-content .doc-card,
+  .pdf-content [data-doc-block="cards"] > * {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    background: #fff;
+  }
+  @page { margin: 16mm; }
+  @media print {
+    .pdf-page { padding: 0; max-width: none; }
+    a { color: inherit; text-decoration: none; }
+  }
+</style>
+</head>
+<body>
+  <div class="pdf-page">
+    <header class="pdf-header">
+      <h1>${safeTitle}</h1>
+      ${safeUpdated ? `<div class="pdf-meta">${safeUpdated}</div>` : ""}
+    </header>
+    <article class="pdf-content doc-viewer">${content}</article>
+  </div>
+</body>
+</html>`;
+
+    // Reuse a single hidden iframe so repeated clicks don't stack frames.
+    let frame = document.getElementById("docPdfFrame");
+    if (!frame) {
+      frame = document.createElement("iframe");
+      frame.id = "docPdfFrame";
+      frame.setAttribute("aria-hidden", "true");
+      frame.setAttribute("tabindex", "-1");
+      Object.assign(frame.style, {
+        position: "fixed",
+        right: "0",
+        bottom: "0",
+        width: "0",
+        height: "0",
+        border: "0",
+        opacity: "0",
+        pointerEvents: "none",
+      });
+      document.body.appendChild(frame);
+    }
+
+    els.btnDownloadDocPdf.disabled = true;
+    const reenable = () => {
+      els.btnDownloadDocPdf.disabled = !currentDocSection();
+    };
+
+    const onLoad = () => {
+      frame.removeEventListener("load", onLoad);
+      // Give fonts a tick to settle before invoking the print dialog.
+      setTimeout(() => {
+        try {
+          const fw = frame.contentWindow;
+          fw.focus();
+          fw.print();
+        } catch (err) {
+          toast("Could not open the print dialog.", true);
+        } finally {
+          setTimeout(reenable, 300);
+        }
+      }, 200);
+    };
+
+    frame.addEventListener("load", onLoad);
+    const doc = frame.contentDocument || frame.contentWindow.document;
+    doc.open();
+    doc.write(html);
+    doc.close();
+  }
 
   // ==========================================================================
   // Docs editor — tables & cards

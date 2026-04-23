@@ -85,9 +85,9 @@ a:hover { text-decoration: underline; }
 }
 .tab:hover { background: var(--surface-3); color: var(--text); }
 .tab.is-active {
-  color: #0b5f55;
-  background: rgba(19, 181, 166, 0.18);
-  box-shadow: inset 0 0 0 1px rgba(19, 181, 166, 0.35);
+  color: var(--brand-700);
+  background: rgba(78, 169, 99, 0.18);
+  box-shadow: inset 0 0 0 1px rgba(78, 169, 99, 0.35);
 }
 
 .appbar__spacer { flex: 1; }
@@ -120,7 +120,7 @@ a:hover { text-decoration: underline; }
   align-items: center;
   justify-content: center;
   color: var(--primary);
-  background: rgba(19, 181, 166, 0.12);
+  background: rgba(78, 169, 99, 0.12);
   border-radius: 16px;
 }
 .placeholder h2 { margin: 0 0 8px; font-size: 22px; font-weight: 600; letter-spacing: -0.01em; }
@@ -322,7 +322,7 @@ a:hover { text-decoration: underline; }
 }
 .section-item:hover { background: var(--surface-3); }
 .section-item.is-active {
-  background: rgba(19, 181, 166, 0.12);
+  background: rgba(78, 169, 99, 0.12);
   color: var(--primary);
   font-weight: 500;
 }
@@ -440,7 +440,7 @@ a:hover { text-decoration: underline; }
   box-shadow: inset 0 -2px 0 0 var(--primary);
 }
 .section-item--doc.drop-into {
-  background: rgba(19, 181, 166, 0.12);
+  background: rgba(78, 169, 99, 0.12);
   box-shadow: inset 0 0 0 2px var(--primary);
 }
 
@@ -579,7 +579,7 @@ a:hover { text-decoration: underline; }
   background: var(--brand-500);
   border-color: var(--brand-500);
   color: #fff;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.1), 0 0 0 1px rgba(15, 156, 144, 0.08);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.1), 0 0 0 1px rgba(47, 111, 63, 0.08);
 }
 .btn-primary:hover:not(:disabled) { background: var(--brand-600); border-color: var(--brand-600); }
 .btn-danger { background: var(--surface); border-color: var(--border-strong); color: var(--danger); }
@@ -592,12 +592,12 @@ a:hover { text-decoration: underline; }
 
 /* AI Generate button — soft accent */
 .btn-ai {
-  background: rgba(19, 181, 166, 0.08);
-  border-color: rgba(19, 181, 166, 0.3);
+  background: rgba(78, 169, 99, 0.08);
+  border-color: rgba(78, 169, 99, 0.3);
   color: var(--primary);
 }
 .btn-ai:hover:not(:disabled) {
-  background: rgba(19, 181, 166, 0.16);
+  background: rgba(78, 169, 99, 0.16);
   border-color: var(--brand-500);
 }
 
@@ -644,8 +644,8 @@ a:hover { text-decoration: underline; }
 }
 .btn-icon--ai {
   color: var(--primary);
-  border-color: rgba(19, 181, 166, 0.35);
-  background: rgba(19, 181, 166, 0.08);
+  border-color: rgba(78, 169, 99, 0.35);
+  background: rgba(78, 169, 99, 0.08);
 }
 .btn-icon--ai:hover:not(:disabled) {
   background: var(--primary);
