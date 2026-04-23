@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-04-23T17:42:40.527Z",
+  "updatedAt": "2026-04-23T17:43:04.899Z",
   "sections": [
     {
       "id": "doc-001",
@@ -47,16 +47,6 @@
       "content": "",
       "createdAt": "2026-04-23T17:33:13.077Z",
       "updatedAt": "2026-04-23T17:33:13.077Z"
-    },
-    {
-      "id": "doc-006",
-      "name": "Testing Data Consistency for 12-Month Trend Reports",
-      "order": 0,
-      "parentId": "doc-005",
-      "content": "<h1>Testing Data Consistency for 12-Month Trend Reports</h1><p>This article outlines how to verify that 12-month trend data points displayed in the UI match the values found in exported reports, addressing a bug where discrepancies were observed.</p><h2>Source Tickets</h2><ul><li><a href=\"https://simuwatt.atlassian.net/browse/BUIL-14592\">BUIL-14592</a> — Data Points showing different values than 12 month trend in UI</li></ul><h2>Why This Matters</h2><p>Accurate and consistent data across the application and its exports is fundamental for user trust, reliable analysis, and informed decision-making. Discrepancies can lead to confusion and incorrect conclusions.</p><h2>Preconditions</h2><ul><li>Access to a QA environment (e.g., <code>qa.buildee.com</code>).</li><li>A test account with permissions to view building overview pages and export reports.</li><li>At least one building with sufficient historical data to generate 12-month trend metrics.</li></ul><h2>How to Test</h2><ol><li>Log in to the application with a suitable test account.</li><li>Navigate to the \"Buildings\" section and select a building that has 12-month trend data.</li><li>Go to the \"Overview\" page for the selected building.</li><li>Locate the \"Text block &gt; data points &gt; overview\" section, specifically the \"12 month trend vs baseline\" card.</li><li>Note down the displayed values for the following metrics:<ul><li>Electricity Cost</li><li>Gas Cost</li><li>Total Cost</li><li>Electricity (mtCO2e)</li><li>Gas (mtCO2e)</li></ul></li><li>Generate and export a report that includes these same 12-month trend metrics.</li><li>Open the exported report and compare the values for each metric against those noted from the UI.</li></ol><h2>Expected Behavior</h2><ul><li>The values for Electricity Cost, Gas Cost, Total Cost, Electricity (mtCO2e), and Gas (mtCO2e) displayed in the UI's \"12 month trend vs baseline\" card should exactly match the corresponding values in the exported report.</li><li>Rounding should be consistent and appropriate across both the UI and the report for all relevant metrics.</li></ul><h2>Edge Cases &amp; Negative Scenarios</h2><ul><li>Test with buildings that have incomplete or no 12-month trend data.</li><li>Verify consistency for other metrics related to the 12-month trend, beyond those explicitly listed in the ticket.</li><li>Check if different report export formats (e.g., PDF, CSV) maintain consistency.</li><li>Test with different user roles to ensure permissions do not affect data consistency.</li></ul><h2>Open Questions</h2><ul><li>What is the specific report type that should be used for comparison?</li><li>What are the exact rounding rules (e.g., number of decimal places) expected for each metric (Cost, mtCO2e) in both the UI and reports?</li><li>The original bug noted \"Total (mtCO2e) NOT TESTED\" — should this metric now also be included in the consistency check?</li><li>Are there any other \"12 month trend\" related metrics that should be specifically verified for consistency?</li></ul>",
-      "isDraft": true,
-      "createdAt": "2026-04-23T17:42:40.527Z",
-      "updatedAt": "2026-04-23T17:42:40.527Z"
     }
   ]
 }
