@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-04-23T06:33:50.465Z",
+  "updatedAt": "2026-04-23T06:34:15.978Z",
   "sections": [
     {
       "id": "doc-001",
@@ -30,10 +30,9 @@
       "id": "doc-004",
       "name": "Jira Ticket BUIL-12629",
       "order": 3,
-      "content": "<h1>Jira Ticket BUIL-12629</h1><p>The provided source content for this documentation section is limited to a single Jira ticket reference. To create a comprehensive QA documentation section, more detailed information about the feature or topic associated with this ticket would be required.</p><p>For direct access to the ticket, please visit: <a href=\"https://simuwatt.atlassian.net/browse/BUIL-12629\">BUIL-12629</a></p>",
-      "isDraft": true,
+      "content": "<h1 data-doc-anchor=\"jira-ticket-buil-12629\" id=\"doc-anchor-jira-ticket-buil-12629\">Jira Ticket BUIL-12629</h1><p>The provided source content for this documentation section is limited to a single Jira ticket reference. To create a comprehensive QA documentation section, more detailed information about the feature or topic associated with this ticket would be required.</p><p>For direct access to the ticket, please visit: <a href=\"https://simuwatt.atlassian.net/browse/BUIL-12629\">BUIL-12629</a>.</p>",
       "createdAt": "2026-04-23T06:33:50.465Z",
-      "updatedAt": "2026-04-23T06:33:50.465Z"
+      "updatedAt": "2026-04-23T06:34:15.978Z"
     }
   ]
 }
