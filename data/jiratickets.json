@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "updatedAt": "2026-04-23T02:34:09.824Z",
+  "sections": [],
+  "tickets": [
+    {
+      "key": "BUIL-14592",
+      "url": "https://simuwatt.atlassian.net/browse/BUIL-14592",
+      "summary": "Data Points showing different values than 12 month trend in UI",
+      "issueType": "Bug",
+      "priority": "Highest",
+      "status": "Closed",
+      "labels": [],
+      "components": [
+        "Reports: Documents"
+      ],
+      "sectionId": null,
+      "createdAt": "2026-04-23T02:34:09.824Z",
+      "updatedAt": "2026-04-23T02:34:09.824Z"
+    }
+  ]
+}
