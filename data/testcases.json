@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": "2026-04-22T23:35:51.421Z",
+  "updatedAt": "2026-04-23T02:36:10.451Z",
   "sections": [
     {
       "id": "sec-002",
@@ -64,6 +64,29 @@
       "expectedResult": "The proposal should save successfully, and no error messages should be displayed.",
       "createdAt": "2026-04-22T23:35:51.421Z",
       "updatedAt": "2026-04-22T23:35:51.421Z"
+    },
+    {
+      "id": "TC-0007",
+      "sectionId": "sec-002",
+      "title": "Verify exported report data points match 12-month trend values on the overview page",
+      "module": "Buildings",
+      "priority": "Highest",
+      "automationStatus": "Not Started",
+      "description": "This test verifies that cost and emissions data points in an exported report accurately match the 12-month trend values displayed on the building overview page.",
+      "steps": [
+        "Navigate to a building's overview page.",
+        "Scroll to the 'Text block > data points > overview' section.",
+        "Note the displayed values for Electricity Cost, Gas Cost, Total Cost, Electricity (mtCO2e), and Gas (mtCO2e) from the '12 month trend vs baseline' card.",
+        "Generate and export a report that includes these data points for the same period.",
+        "Open the exported report and navigate to the section containing the data points.",
+        "Compare the Electricity Cost, Gas Cost, Total Cost, Electricity (mtCO2e), and Gas (mtCO2e) values in the report with those noted from the UI."
+      ],
+      "expectedResult": "The Electricity Cost, Gas Cost, Total Cost, Electricity (mtCO2e), and Gas (mtCO2e) values in the exported report must precisely match the corresponding 12-month trend values displayed in the 'Text block > data points > overview' section of the building's UI, with consistent and appropriate rounding.",
+      "sources": [
+        "BUIL-14592"
+      ],
+      "createdAt": "2026-04-23T02:36:10.451Z",
+      "updatedAt": "2026-04-23T02:36:10.451Z"
     }
   ]
 }
