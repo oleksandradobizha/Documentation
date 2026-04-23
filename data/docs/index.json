@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "updatedAt": "2026-04-23T17:57:07.519Z",
+  "sections": [
+    {
+      "id": "doc-001",
+      "name": "QA Process",
+      "order": 0,
+      "createdAt": "2026-04-22T21:43:09.690Z",
+      "updatedAt": "2026-04-23T17:41:16.830Z",
+      "icon": "⚙️"
+    },
+    {
+      "id": "doc-002",
+      "name": "Important Links",
+      "order": 1,
+      "createdAt": "2026-04-22T21:45:12.527Z",
+      "updatedAt": "2026-04-23T17:41:29.126Z",
+      "icon": "🌐"
+    },
+    {
+      "id": "doc-003",
+      "name": "Test Automation",
+      "order": 2,
+      "createdAt": "2026-04-22T22:59:54.247Z",
+      "updatedAt": "2026-04-23T17:41:21.842Z",
+      "icon": "📄"
+    },
+    {
+      "id": "doc-004",
+      "name": "Jira Source Content Unavailable",
+      "order": 3,
+      "parentId": null,
+      "isDraft": true,
+      "createdAt": "2026-04-23T06:46:21.046Z",
+      "updatedAt": "2026-04-23T06:46:52.435Z"
+    },
+    {
+      "id": "doc-005",
+      "name": "HowTo",
+      "order": 4,
+      "parentId": null,
+      "createdAt": "2026-04-23T17:33:13.077Z",
+      "updatedAt": "2026-04-23T17:43:37.188Z",
+      "icon": "🧩"
+    },
+    {
+      "id": "doc-006",
+      "name": "Testing Portfolio Manager Settings Dialog Scroll",
+      "order": 0,
+      "parentId": "doc-005",
+      "isDraft": true,
+      "createdAt": "2026-04-23T17:57:07.519Z",
+      "updatedAt": "2026-04-23T17:57:07.519Z"
+    }
+  ]
+}
