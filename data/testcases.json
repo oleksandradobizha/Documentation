@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": "2026-04-23T02:37:09.056Z",
+  "updatedAt": "2026-04-23T06:18:32.446Z",
   "sections": [
     {
       "id": "sec-002",
@@ -39,12 +39,13 @@
       "title": "1233",
       "module": "Project",
       "priority": "High",
-      "automationStatus": "Done",
+      "automationStatus": "In Progress",
       "description": "",
       "steps": [],
       "expectedResult": "",
       "createdAt": "2026-04-22T21:18:34.773Z",
-      "updatedAt": "2026-04-22T21:31:03.874Z"
+      "updatedAt": "2026-04-23T06:18:32.446Z",
+      "sources": []
     },
     {
       "id": "TC-0006",
