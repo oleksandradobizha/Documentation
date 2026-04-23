@@ -4,6 +4,7 @@ import {
   draftTestCaseFromIssue,
   draftTestCaseFromIssues,
   draftDocSectionFromSource,
+  draftHowToFromIssues,
   isAiConfigured,
 } from "../services/ai.js";
 import { requireApiKey } from "../middleware/auth.js";
@@ -76,6 +77,40 @@ router.post("/generate-from-tickets", requireApiKey, async (req, res, next) => {
     next(e);
   }
 });
+
+/**
+ * POST /api/ai/generate-howto-from-tickets
+ * Body: { keys: string[] }  (JIRA keys or full URLs)
+ * Returns: { issues, draft: { title, content } } — a "how to test" article
+ * drafted from the combined scope of the tickets. The frontend creates a
+ * doc section from the draft with `isDraft: true` so QA can review it.
+ */
+router.post(
+  "/generate-howto-from-tickets",
+  requireApiKey,
+  async (req, res, next) => {
+    try {
+      const raw = Array.isArray(req.body?.keys) ? req.body.keys : [];
+      const inputs = raw.map((x) => String(x || "").trim()).filter(Boolean);
+      if (!inputs.length) {
+        return res.status(400).json({ error: "keys is required (array)" });
+      }
+      if (inputs.length > 8) {
+        return res
+          .status(400)
+          .json({ error: "Too many tickets — please pick at most 8." });
+      }
+      const issues = [];
+      for (const input of inputs) {
+        issues.push(await fetchIssue(input));
+      }
+      const draft = await draftHowToFromIssues(issues);
+      res.json({ issues, draft });
+    } catch (e) {
+      next(e);
+    }
+  }
+);
 
 /**
  * POST /api/ai/generate-doc-section

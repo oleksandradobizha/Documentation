@@ -27,6 +27,8 @@
       saveTimer: null,
       editing: false,
       originalContent: "",
+      search: "",
+      searchHit: null,
     },
     // JIRA tickets
     jira: {
@@ -109,6 +111,9 @@
     // documentation
     docSectionList: $("docSectionList"),
     docSectionEmpty: $("docSectionEmpty"),
+    docSearch: $("docSearch"),
+    btnClearDocSearch: $("btnClearDocSearch"),
+    docSearchEmpty: $("docSearchEmpty"),
     btnAddDocSection: $("btnAddDocSection"),
     btnRenameDocSection: $("btnRenameDocSection"),
     btnDeleteDocSection: $("btnDeleteDocSection"),
@@ -176,6 +181,7 @@
     jiraSearch: $("jiraSearch"),
     btnJiraExtract: $("btnJiraExtract"),
     btnJiraGenerate: $("btnJiraGenerate"),
+    btnJiraHowTo: $("btnJiraHowTo"),
     jiraBulkBar: $("jiraBulkBar"),
     jiraBulkCount: $("jiraBulkCount"),
     btnJiraMoveMenu: $("btnJiraMoveMenu"),
@@ -285,6 +291,7 @@
   function applyFeatureFlags() {
     const showJiraAi = state.features.aiEnabled && state.features.jiraEnabled;
     els.btnJiraGenerate?.classList.toggle("hidden", !showJiraAi);
+    els.btnJiraHowTo?.classList.toggle("hidden", !showJiraAi);
     els.btnGenerateDocSection?.classList.toggle(
       "hidden",
       !state.features.aiEnabled
@@ -1603,6 +1610,16 @@
     return sortedDocSections().filter((s) => s.parentId === parentId);
   }
 
+  const DEFAULT_DOC_ICON = "📄";
+
+  const DOC_ICON_CHOICES = [
+    "📄", "📘", "📗", "📙", "📕", "📓", "📔", "📒",
+    "📝", "🗂", "📋", "📋", "📁", "📂", "🗄", "🗃",
+    "📊", "📈", "📉", "💡", "⚙️", "🔧", "🛠", "🔩",
+    "🧪", "🧭", "🚀", "🎯", "🧩", "🔐", "🧰", "✨",
+    "⭐", "⚡", "🌐", "🔌", "🧠", "🔬", "📡", "🖥",
+  ];
+
   function renderDocSectionItem(s, isChild) {
     const active = s.id === state.docs.activeId;
     const draftBadge = s.isDraft
@@ -1626,6 +1643,16 @@
     ]
       .filter(Boolean)
       .join(" ");
+    const icon = s.icon && s.icon.trim() ? s.icon : DEFAULT_DOC_ICON;
+    const iconBtn = `
+      <button
+        type="button"
+        class="section-item__icon"
+        data-action="change-icon"
+        data-id="${escapeHtml(s.id)}"
+        title="Change icon"
+        aria-label="Change icon"
+      >${escapeHtml(icon)}</button>`;
     return `
       <li
         class="${classes}"
@@ -1633,27 +1660,269 @@
         data-parent-id="${escapeHtml(s.parentId || "")}"
         draggable="true"
       >
+        ${iconBtn}
         <span class="section-item__name">${escapeHtml(s.name)}</span>
         ${draftBadge}
       </li>`;
   }
 
+  // Pull H1/H2/H3 headings from a section's saved HTML content so we can
+  // render them as an outline tree under the active section in the sidebar.
+  function extractDocHeadings(html) {
+    if (!html) return [];
+    const container = document.createElement("div");
+    container.innerHTML = html;
+    const nodes = container.querySelectorAll("h1, h2, h3");
+    const items = [];
+    nodes.forEach((node, i) => {
+      const text = (node.textContent || "").trim();
+      if (!text) return;
+      const level = Number(node.tagName.substring(1)) || 1;
+      let anchor = node.getAttribute("data-doc-anchor") || "";
+      if (!anchor) {
+        const idAttr = node.getAttribute("id") || "";
+        anchor = idAttr.startsWith("doc-anchor-")
+          ? idAttr.slice("doc-anchor-".length)
+          : slug(text) || `h-${i}`;
+      }
+      items.push({ level, text, anchor });
+    });
+    return items;
+  }
+
+  function renderDocOutline(section) {
+    const headings = extractDocHeadings(section.content || "");
+    if (!headings.length) return "";
+    const items = headings
+      .map(
+        (h) => `
+        <li
+          class="doc-outline-item doc-outline-item--level-${h.level}"
+          data-action="jump-heading"
+          data-section-id="${escapeHtml(section.id)}"
+          data-anchor="${escapeHtml(h.anchor)}"
+          title="${escapeHtml(h.text)}"
+        >
+          <span class="doc-outline-item__text">${escapeHtml(h.text)}</span>
+        </li>`
+      )
+      .join("");
+    return `<li class="doc-outline-wrap" role="presentation"><ul class="doc-outline" role="group">${items}</ul></li>`;
+  }
+
+  function renderDocSectionBranch(s, isChild) {
+    const active = s.id === state.docs.activeId;
+    return renderDocSectionItem(s, isChild) + (active ? renderDocOutline(s) : "");
+  }
+
   function renderDocSections() {
     const hasSections = state.docs.sections.length > 0;
-    els.docSectionEmpty.classList.toggle("hidden", hasSections);
-    els.docSectionList.innerHTML = topLevelDocSections()
-      .map((parent) => {
-        const children = childDocSections(parent.id);
-        const childItems = children
-          .map((c) => renderDocSectionItem(c, true))
-          .join("");
-        return renderDocSectionItem(parent, false) + childItems;
-      })
-      .join("");
+    const query = state.docs.search.trim();
+    const searching = query.length > 0;
+    els.docSectionEmpty.classList.toggle(
+      "hidden",
+      hasSections || searching
+    );
+    els.docSectionList.classList.toggle("section-list--search", searching);
+
+    if (searching) {
+      const results = searchDocs(query);
+      els.docSectionList.innerHTML = renderDocSearchResults(results, query);
+      els.docSearchEmpty.classList.toggle("hidden", results.length > 0);
+    } else {
+      els.docSearchEmpty.classList.add("hidden");
+      els.docSectionList.innerHTML = topLevelDocSections()
+        .map((parent) => {
+          const children = childDocSections(parent.id);
+          const childItems = children
+            .map((c) => renderDocSectionBranch(c, true))
+            .join("");
+          return renderDocSectionBranch(parent, false) + childItems;
+        })
+        .join("");
+    }
 
     const hasActive = !!currentDocSection();
     els.btnRenameDocSection.disabled = !hasActive;
     els.btnDeleteDocSection.disabled = !hasActive;
+  }
+
+  // ---------- Documentation search ----------
+  // Search across section names, headings, and text content. Returns a flat
+  // list of hits grouped by section so the sidebar can render them.
+  function searchDocs(query) {
+    const q = query.trim().toLowerCase();
+    if (!q) return [];
+    const maxTextHitsPerSection = 4;
+    const groups = [];
+
+    for (const s of sortedDocSections()) {
+      const nameHit = s.name.toLowerCase().includes(q);
+      const container = document.createElement("div");
+      container.innerHTML = s.content || "";
+
+      const headingHits = [];
+      container.querySelectorAll("h1, h2, h3").forEach((node, i) => {
+        const text = (node.textContent || "").trim();
+        if (!text) return;
+        if (!text.toLowerCase().includes(q)) return;
+        const level = Number(node.tagName.substring(1)) || 1;
+        let anchor = node.getAttribute("data-doc-anchor") || "";
+        if (!anchor) {
+          const idAttr = node.getAttribute("id") || "";
+          anchor = idAttr.startsWith("doc-anchor-")
+            ? idAttr.slice("doc-anchor-".length)
+            : slug(text) || `h-${i}`;
+        }
+        headingHits.push({ kind: "heading", level, text, anchor });
+      });
+
+      const textHits = [];
+      const walker = document.createTreeWalker(
+        container,
+        NodeFilter.SHOW_TEXT,
+        null
+      );
+      let occurrence = 0;
+      while (walker.nextNode() && textHits.length < maxTextHitsPerSection) {
+        const node = walker.currentNode;
+        if (
+          node.parentElement &&
+          node.parentElement.closest("h1, h2, h3")
+        ) {
+          continue; // headings already captured above
+        }
+        const raw = node.nodeValue || "";
+        const lower = raw.toLowerCase();
+        let idx = lower.indexOf(q);
+        while (
+          idx !== -1 &&
+          textHits.length < maxTextHitsPerSection
+        ) {
+          const snippet = buildSnippet(raw, idx, q.length);
+          textHits.push({
+            kind: "text",
+            snippet,
+            occurrence,
+          });
+          occurrence += 1;
+          idx = lower.indexOf(q, idx + q.length);
+        }
+      }
+
+      if (nameHit || headingHits.length || textHits.length) {
+        groups.push({
+          section: s,
+          nameHit,
+          hits: [...headingHits, ...textHits],
+        });
+      }
+    }
+    return groups;
+  }
+
+  function buildSnippet(text, matchIdx, matchLen) {
+    const WINDOW = 50;
+    const start = Math.max(0, matchIdx - WINDOW);
+    const end = Math.min(text.length, matchIdx + matchLen + WINDOW);
+    const before = text.slice(start, matchIdx);
+    const hit = text.slice(matchIdx, matchIdx + matchLen);
+    const after = text.slice(matchIdx + matchLen, end);
+    const prefix = start > 0 ? "…" : "";
+    const suffix = end < text.length ? "…" : "";
+    return {
+      before: (prefix + before).replace(/\s+/g, " "),
+      hit,
+      after: (after + suffix).replace(/\s+/g, " "),
+    };
+  }
+
+  function renderSnippet(snippet) {
+    return (
+      escapeHtml(snippet.before) +
+      `<mark class="doc-search-snippet__hit">${escapeHtml(snippet.hit)}</mark>` +
+      escapeHtml(snippet.after)
+    );
+  }
+
+  function renderDocSearchResults(groups, query) {
+    if (!groups.length) return "";
+    return groups
+      .map((g) => {
+        const icon =
+          g.section.icon && g.section.icon.trim()
+            ? g.section.icon
+            : DEFAULT_DOC_ICON;
+        const header = `
+          <li
+            class="doc-search-section"
+            data-action="jump-section"
+            data-section-id="${escapeHtml(g.section.id)}"
+            title="${escapeHtml(g.section.name)}"
+          >
+            <span class="doc-search-section__icon">${escapeHtml(icon)}</span>
+            <span class="doc-search-section__name">${highlightMatch(
+              g.section.name,
+              query
+            )}</span>
+          </li>`;
+        const hitItems = g.hits
+          .map((h) => {
+            if (h.kind === "heading") {
+              return `
+                <li
+                  class="doc-search-hit doc-search-hit--heading doc-search-hit--level-${h.level}"
+                  data-action="jump-heading-search"
+                  data-section-id="${escapeHtml(g.section.id)}"
+                  data-anchor="${escapeHtml(h.anchor)}"
+                  title="${escapeHtml(h.text)}"
+                >
+                  <span class="doc-search-hit__kind">H${h.level}</span>
+                  <span class="doc-search-hit__text">${highlightMatch(
+                    h.text,
+                    query
+                  )}</span>
+                </li>`;
+            }
+            return `
+              <li
+                class="doc-search-hit doc-search-hit--text"
+                data-action="jump-text-search"
+                data-section-id="${escapeHtml(g.section.id)}"
+                data-occurrence="${h.occurrence}"
+              >
+                <span class="doc-search-hit__text">${renderSnippet(
+                  h.snippet
+                )}</span>
+              </li>`;
+          })
+          .join("");
+        return header + hitItems;
+      })
+      .join("");
+  }
+
+  function highlightMatch(text, query) {
+    const q = query.trim();
+    if (!q) return escapeHtml(text);
+    const lower = text.toLowerCase();
+    const qLower = q.toLowerCase();
+    let out = "";
+    let i = 0;
+    while (i < text.length) {
+      const idx = lower.indexOf(qLower, i);
+      if (idx === -1) {
+        out += escapeHtml(text.slice(i));
+        break;
+      }
+      out += escapeHtml(text.slice(i, idx));
+      out +=
+        `<mark class="doc-search-snippet__hit">` +
+        escapeHtml(text.slice(idx, idx + q.length)) +
+        `</mark>`;
+      i = idx + q.length;
+    }
+    return out;
   }
 
   function renderDocContent() {
@@ -1680,6 +1949,9 @@
     if (els.docViewer.dataset.loadedId !== s.id) {
       els.docViewer.innerHTML = s.content || "";
       els.docViewer.dataset.loadedId = s.id;
+      if (state.docs.search.trim()) {
+        highlightDocViewerMatches();
+      }
     }
 
     // Refresh the editor only when switching sections (avoids clobbering edits)
@@ -1752,6 +2024,7 @@
       els.docViewer.dataset.loadedId = s.id;
     }
     applyDocMode();
+    if (state.docs.search.trim()) highlightDocViewerMatches();
   }
 
   async function cancelDocEdit() {
@@ -1872,6 +2145,8 @@
       els.docSectionMeta.textContent = updated.updatedAt
         ? `Last updated ${new Date(updated.updatedAt).toLocaleString()}`
         : "";
+      // Refresh sidebar so the heading outline reflects the saved content.
+      renderDocSections();
       // Explicit save returns to view mode
       if (!isAuto) {
         toast("Saved");
@@ -2184,6 +2459,36 @@
     .querySelectorAll("input[name='type']")
     .forEach((r) => r.addEventListener("change", syncParentVisibility));
 
+  // ---------- Doc sidebar search ----------
+  let docSearchTimer = null;
+  function applyDocSearch(value) {
+    state.docs.search = value || "";
+    els.btnClearDocSearch.classList.toggle(
+      "hidden",
+      !state.docs.search.trim()
+    );
+    renderDocSections();
+    highlightDocViewerMatches();
+  }
+
+  els.docSearch.addEventListener("input", (e) => {
+    const value = e.target.value;
+    clearTimeout(docSearchTimer);
+    docSearchTimer = setTimeout(() => applyDocSearch(value), 120);
+  });
+  els.docSearch.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && state.docs.search) {
+      e.stopPropagation();
+      els.docSearch.value = "";
+      applyDocSearch("");
+    }
+  });
+  els.btnClearDocSearch.addEventListener("click", () => {
+    els.docSearch.value = "";
+    applyDocSearch("");
+    els.docSearch.focus();
+  });
+
   // ---------- Doc sidebar: drag and drop reordering ----------
   const dragState = { id: null };
 
@@ -2421,6 +2726,56 @@
       return;
     }
 
+    const iconBtn = e.target.closest("[data-action='change-icon']");
+    if (iconBtn) {
+      e.stopPropagation();
+      openDocIconPicker(iconBtn);
+      return;
+    }
+
+    const outlineItem = e.target.closest("[data-action='jump-heading']");
+    if (outlineItem) {
+      e.stopPropagation();
+      await jumpToDocHeading(
+        outlineItem.dataset.sectionId,
+        outlineItem.dataset.anchor
+      );
+      return;
+    }
+
+    const searchSection = e.target.closest("[data-action='jump-section']");
+    if (searchSection) {
+      e.stopPropagation();
+      await activateDocSection(searchSection.dataset.sectionId);
+      setTimeout(() => highlightDocViewerMatches({ scrollTo: 0 }), 40);
+      return;
+    }
+
+    const searchHeading = e.target.closest(
+      "[data-action='jump-heading-search']"
+    );
+    if (searchHeading) {
+      e.stopPropagation();
+      await jumpToDocHeading(
+        searchHeading.dataset.sectionId,
+        searchHeading.dataset.anchor
+      );
+      setTimeout(() => highlightDocViewerMatches(), 60);
+      return;
+    }
+
+    const searchText = e.target.closest("[data-action='jump-text-search']");
+    if (searchText) {
+      e.stopPropagation();
+      const occ = Number(searchText.dataset.occurrence) || 0;
+      await activateDocSection(searchText.dataset.sectionId);
+      setTimeout(
+        () => highlightDocViewerMatches({ scrollTo: occ }),
+        40
+      );
+      return;
+    }
+
     const li = e.target.closest(".section-item");
     if (!li) return;
     const id = li.dataset.id;
@@ -2434,6 +2789,247 @@
     renderDocSections();
     renderDocContent();
   });
+
+  // ---------- Icon picker ----------
+  function closeDocIconPicker() {
+    const existing = document.getElementById("docIconPicker");
+    if (existing) existing.remove();
+    document.removeEventListener("mousedown", onDocIconPickerBackdrop, true);
+    document.removeEventListener("keydown", onDocIconPickerKey, true);
+  }
+
+  function onDocIconPickerBackdrop(e) {
+    const picker = document.getElementById("docIconPicker");
+    if (!picker) return;
+    if (picker.contains(e.target)) return;
+    if (e.target.closest("[data-action='change-icon']")) return;
+    closeDocIconPicker();
+  }
+
+  function onDocIconPickerKey(e) {
+    if (e.key === "Escape") closeDocIconPicker();
+  }
+
+  function openDocIconPicker(anchorBtn) {
+    closeDocIconPicker();
+    const sectionId = anchorBtn.dataset.id;
+    const section = state.docs.sections.find((s) => s.id === sectionId);
+    if (!section) return;
+
+    const picker = document.createElement("div");
+    picker.id = "docIconPicker";
+    picker.className = "doc-icon-picker";
+    picker.setAttribute("role", "dialog");
+    picker.setAttribute("aria-label", "Choose section icon");
+
+    const currentIcon =
+      section.icon && section.icon.trim() ? section.icon : DEFAULT_DOC_ICON;
+    const grid = DOC_ICON_CHOICES
+      .map(
+        (emoji) => `
+          <button
+            type="button"
+            class="doc-icon-picker__choice${
+              emoji === currentIcon ? " is-current" : ""
+            }"
+            data-icon="${escapeHtml(emoji)}"
+            title="${escapeHtml(emoji)}"
+          >${escapeHtml(emoji)}</button>`
+      )
+      .join("");
+
+    picker.innerHTML = `
+      <div class="doc-icon-picker__grid">${grid}</div>
+      <div class="doc-icon-picker__footer">
+        <button type="button" class="doc-icon-picker__reset" data-icon="">
+          Reset to default
+        </button>
+      </div>`;
+
+    document.body.appendChild(picker);
+
+    // Position below and aligned with the anchor button, keeping it on-screen.
+    const rect = anchorBtn.getBoundingClientRect();
+    const pw = picker.offsetWidth;
+    const ph = picker.offsetHeight;
+    let left = rect.left;
+    if (left + pw > window.innerWidth - 8) {
+      left = Math.max(8, window.innerWidth - pw - 8);
+    }
+    let top = rect.bottom + 6;
+    if (top + ph > window.innerHeight - 8) {
+      top = Math.max(8, rect.top - ph - 6);
+    }
+    picker.style.left = `${Math.round(left)}px`;
+    picker.style.top = `${Math.round(top)}px`;
+
+    picker.addEventListener("click", async (e) => {
+      const choice = e.target.closest("[data-icon]");
+      if (!choice) return;
+      const nextIcon = choice.dataset.icon || "";
+      closeDocIconPicker();
+      await saveDocSectionIcon(sectionId, nextIcon);
+    });
+
+    setTimeout(() => {
+      document.addEventListener("mousedown", onDocIconPickerBackdrop, true);
+      document.addEventListener("keydown", onDocIconPickerKey, true);
+    }, 0);
+  }
+
+  async function saveDocSectionIcon(id, icon) {
+    const idx = state.docs.sections.findIndex((s) => s.id === id);
+    if (idx === -1) return;
+    const prev = state.docs.sections[idx];
+    // Optimistically update so the sidebar feels snappy.
+    const nextIcon = icon && icon.trim() ? icon : null;
+    if ((prev.icon || null) === nextIcon) return;
+    state.docs.sections[idx] = { ...prev, icon: nextIcon || undefined };
+    renderDocSections();
+    try {
+      const updated = await api(`/docs/sections/${encodeURIComponent(id)}`, {
+        method: "PUT",
+        body: JSON.stringify({ icon: nextIcon }),
+      });
+      state.docs.sections[idx] = updated;
+      renderDocSections();
+    } catch (err) {
+      state.docs.sections[idx] = prev;
+      renderDocSections();
+      toast("Could not update icon: " + err.message, true);
+    }
+  }
+
+  // ---------- Outline navigation ----------
+  async function activateDocSection(sectionId) {
+    if (!sectionId) return false;
+    if (sectionId === state.docs.activeId) return true;
+    if (!(await confirmDiscardIfDirty())) return false;
+    state.docs.activeId = sectionId;
+    state.docs.editing = false;
+    state.docs.dirty = false;
+    els.docEditor.dataset.loadedId = "";
+    els.docViewer.dataset.loadedId = "";
+    renderDocSections();
+    renderDocContent();
+    return true;
+  }
+
+  async function jumpToDocHeading(sectionId, anchor) {
+    if (!sectionId || !anchor) return;
+    const ok = await activateDocSection(sectionId);
+    if (!ok) return;
+    // Defer scroll so the viewer/editor has rendered the latest content.
+    setTimeout(() => scrollDocAnchorIntoView(anchor), 40);
+  }
+
+  // Highlight all matches of the current search query inside the viewer and
+  // optionally scroll a specific occurrence into view. The highlights persist
+  // while the search query is active; switching sections or clearing the
+  // search removes them on the next render.
+  function highlightDocViewerMatches({ scrollTo = null } = {}) {
+    const host = els.docViewer;
+    if (!host) return;
+    // Remove any previous highlights first to avoid stacking.
+    host.querySelectorAll("mark.doc-viewer-hit").forEach((mark) => {
+      const parent = mark.parentNode;
+      if (!parent) return;
+      while (mark.firstChild) parent.insertBefore(mark.firstChild, mark);
+      parent.removeChild(mark);
+      parent.normalize();
+    });
+
+    const query = state.docs.search.trim();
+    if (!query) return;
+    if (host.classList.contains("hidden")) return;
+
+    const qLower = query.toLowerCase();
+    const hits = [];
+    const walker = document.createTreeWalker(host, NodeFilter.SHOW_TEXT, {
+      acceptNode(node) {
+        if (!node.nodeValue) return NodeFilter.FILTER_REJECT;
+        if (
+          node.parentElement &&
+          node.parentElement.closest(
+            "script, style, mark.doc-viewer-hit"
+          )
+        ) {
+          return NodeFilter.FILTER_REJECT;
+        }
+        return node.nodeValue.toLowerCase().includes(qLower)
+          ? NodeFilter.FILTER_ACCEPT
+          : NodeFilter.FILTER_REJECT;
+      },
+    });
+
+    const textNodes = [];
+    while (walker.nextNode()) textNodes.push(walker.currentNode);
+
+    for (const node of textNodes) {
+      const text = node.nodeValue;
+      const lower = text.toLowerCase();
+      const frag = document.createDocumentFragment();
+      let i = 0;
+      while (i < text.length) {
+        const idx = lower.indexOf(qLower, i);
+        if (idx === -1) {
+          frag.appendChild(document.createTextNode(text.slice(i)));
+          break;
+        }
+        if (idx > i) {
+          frag.appendChild(document.createTextNode(text.slice(i, idx)));
+        }
+        const mark = document.createElement("mark");
+        mark.className = "doc-viewer-hit";
+        mark.textContent = text.slice(idx, idx + query.length);
+        frag.appendChild(mark);
+        hits.push(mark);
+        i = idx + query.length;
+      }
+      node.parentNode.replaceChild(frag, node);
+    }
+
+    if (!hits.length) return;
+    const idx = Math.max(0, Math.min(hits.length - 1, Number(scrollTo) || 0));
+    const target = hits[idx];
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth", block: "center" });
+      target.classList.add("doc-viewer-hit--current");
+      setTimeout(
+        () => target.classList.remove("doc-viewer-hit--current"),
+        1600
+      );
+    }
+  }
+
+  function scrollDocAnchorIntoView(anchor) {
+    if (!anchor) return;
+    const host = state.docs.editing ? els.docEditor : els.docViewer;
+    if (!host) return;
+    const sel = `[data-doc-anchor="${CSS.escape(anchor)}"], #${CSS.escape(
+      "doc-anchor-" + anchor
+    )}`;
+    let target = null;
+    try {
+      target = host.querySelector(sel);
+    } catch (_) {
+      /* bad selector — fall through to fallback */
+    }
+    if (!target) {
+      // Fallback: find the first heading whose slug matches.
+      const heads = host.querySelectorAll("h1, h2, h3");
+      for (const h of heads) {
+        if (slug(h.textContent || "") === anchor) {
+          target = h;
+          break;
+        }
+      }
+    }
+    if (!target) return;
+    target.scrollIntoView({ behavior: "smooth", block: "start" });
+    target.classList.add("doc-heading--flash");
+    setTimeout(() => target.classList.remove("doc-heading--flash"), 1400);
+  }
 
   els.docEditor.addEventListener("input", () => {
     markDocDirty();
@@ -3386,6 +3982,7 @@
     const showAi =
       state.features.aiEnabled && state.features.jiraEnabled && n > 0;
     els.btnJiraGenerate.disabled = !showAi;
+    if (els.btnJiraHowTo) els.btnJiraHowTo.disabled = !showAi;
   }
 
   // ---------- Jira section CRUD ----------
@@ -3706,6 +4303,104 @@
     }
   }
 
+  // Find the top-level "How To" doc section, creating it if missing.
+  // Returns the section object, or null if creation fails.
+  async function ensureHowToParentSection() {
+    if (!state.docs.loaded) {
+      try {
+        await loadDocs();
+      } catch {
+        // non-fatal — we'll try to create one below
+      }
+    }
+    const existing = state.docs.sections.find(
+      (s) =>
+        !s.parentId &&
+        typeof s.name === "string" &&
+        /^how\s*[-]?\s*to$/i.test(s.name.trim())
+    );
+    if (existing) return existing;
+    try {
+      const created = await api("/docs/sections", {
+        method: "POST",
+        body: JSON.stringify({ name: "How To", content: "" }),
+      });
+      state.docs.sections.push(created);
+      return created;
+    } catch (err) {
+      // If creation fails (e.g. name clash with a different casing), fall
+      // back to top-level draft placement so the draft isn't lost.
+      console.warn("[docs] could not create How To parent:", err.message);
+      return null;
+    }
+  }
+
+  async function generateHowToFromSelection() {
+    const keys = [...state.jira.selectedKeys];
+    if (!keys.length) {
+      toast("Select one or more tickets first", true);
+      return;
+    }
+    if (keys.length > 8) {
+      toast("Please select at most 8 tickets", true);
+      return;
+    }
+    if (!state.features.aiEnabled || !state.features.jiraEnabled) {
+      toast("AI / JIRA integration is not configured", true);
+      return;
+    }
+    if (!els.btnJiraHowTo) return;
+    els.btnJiraHowTo.disabled = true;
+    els.btnJiraHowTo.classList.add("is-loading");
+    try {
+      toast(
+        keys.length === 1
+          ? `Drafting How-To article from ${keys[0]}…`
+          : `Drafting How-To article from ${keys.length} tickets…`
+      );
+      const { draft } = await api("/ai/generate-howto-from-tickets", {
+        method: "POST",
+        body: JSON.stringify({ keys }),
+      });
+      if (!draft || !draft.content) {
+        throw new Error("AI returned an empty draft");
+      }
+
+      const parent = await ensureHowToParentSection();
+      const name = uniqueDocSectionName(draft.title);
+      const created = await api("/docs/sections", {
+        method: "POST",
+        body: JSON.stringify({
+          name,
+          content: draft.content || "",
+          isDraft: true,
+          parentId: parent ? parent.id : null,
+        }),
+      });
+      state.docs.sections.push(created);
+      state.docs.activeId = created.id;
+      els.docEditor.dataset.loadedId = "";
+      els.docViewer.dataset.loadedId = "";
+
+      setTab("documentation");
+      renderDocSections();
+      renderDocContent();
+      enterDocEditMode();
+
+      toast(
+        parent
+          ? `Draft "${created.name}" added under "${parent.name}" — review and save when done.`
+          : `Draft "${created.name}" ready — review and save when done.`
+      );
+    } catch (err) {
+      toast(err.message || "How-To generation failed", true);
+    } finally {
+      els.btnJiraHowTo.disabled = false;
+      els.btnJiraHowTo.classList.remove("is-loading");
+      renderJiraBulkBar();
+    }
+  }
+
   // ---------- Jira event wiring ----------
   els.btnAddJiraSection?.addEventListener("click", openAddJiraSection);
   els.btnRenameJiraSectionIcon?.addEventListener(
@@ -3755,6 +4450,7 @@
   els.btnJiraExtract?.addEventListener("click", openJiraExtract);
   els.jiraExtractForm?.addEventListener("submit", onJiraExtractSubmit);
   els.btnJiraGenerate?.addEventListener("click", generateFromSelection);
+  els.btnJiraHowTo?.addEventListener("click", generateHowToFromSelection);
 
   els.jiraBody?.addEventListener("click", (e) => {
     const tcLink = e.target.closest("a[data-action='open-tc']");

@@ -81,6 +81,9 @@ router.post("/sections", requireApiKey, async (req, res, next) => {
       isDraft: req.body?.isDraft,
       parentId: req.body?.parentId,
       order: req.body?.order,
+      ...(Object.prototype.hasOwnProperty.call(req.body || {}, "icon")
+        ? { icon: req.body.icon }
+        : {}),
     });
     const { name, content = "" } = sanitized;
     const isDraft = sanitized.isDraft === true;
@@ -110,6 +113,11 @@ router.post("/sections", requireApiKey, async (req, res, next) => {
         : siblings.reduce((m, s) => Math.max(m, s.order ?? 0), -1) + 1;
 
     const now = new Date().toISOString();
+    const icon =
+      Object.prototype.hasOwnProperty.call(sanitized, "icon") &&
+      sanitized.icon
+        ? sanitized.icon
+        : null;
     const section = {
       id: nextDocSectionId(doc.sections),
       name,
@@ -117,6 +125,7 @@ router.post("/sections", requireApiKey, async (req, res, next) => {
       parentId: parentId || null,
       content,
       ...(isDraft ? { isDraft: true } : {}),
+      ...(icon ? { icon } : {}),
       createdAt: now,
       updatedAt: now,
     };
@@ -139,10 +148,18 @@ router.put("/sections/:id", requireApiKey, async (req, res, next) => {
     const hasDraft = Object.prototype.hasOwnProperty.call(body, "isDraft");
     const hasParent = Object.prototype.hasOwnProperty.call(body, "parentId");
     const hasOrder = Object.prototype.hasOwnProperty.call(body, "order");
-    if (!hasName && !hasContent && !hasDraft && !hasParent && !hasOrder) {
+    const hasIcon = Object.prototype.hasOwnProperty.call(body, "icon");
+    if (
+      !hasName &&
+      !hasContent &&
+      !hasDraft &&
+      !hasParent &&
+      !hasOrder &&
+      !hasIcon
+    ) {
       return res.status(400).json({
         error:
-          "Provide at least 'name', 'content', 'isDraft', 'parentId', or 'order'.",
+          "Provide at least 'name', 'content', 'isDraft', 'parentId', 'order', or 'icon'.",
       });
     }
     validateDocSection(body, { requireName: hasName });
@@ -176,6 +193,7 @@ router.put("/sections/:id", requireApiKey, async (req, res, next) => {
     const existing = doc.sections[idx];
     const updated = { ...existing, ...patch, updatedAt: now };
     if (patch.isDraft === false) delete updated.isDraft;
+    if (hasIcon && !patch.icon) delete updated.icon;
     doc.sections[idx] = updated;
     doc.updatedAt = now;
 

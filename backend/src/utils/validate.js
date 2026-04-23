@@ -206,6 +206,12 @@ export function validateDocSection(s, { requireName = true } = {}) {
   if (s?.order != null && !Number.isFinite(Number(s.order))) {
     errors.push("order must be a number");
   }
+  if (s?.icon != null && s.icon !== "" && typeof s.icon !== "string") {
+    errors.push("icon must be a string or null");
+  }
+  if (typeof s?.icon === "string" && s.icon.length > 16) {
+    errors.push("icon is too long");
+  }
   if (errors.length) {
     const err = new Error(errors.join("; "));
     err.status = 400;
@@ -224,6 +230,10 @@ export function sanitizeDocSection(s) {
   }
   if (s.order != null && Number.isFinite(Number(s.order))) {
     out.order = Number(s.order);
+  }
+  if (Object.prototype.hasOwnProperty.call(s, "icon")) {
+    const v = s.icon;
+    out.icon = v === "" || v == null ? null : String(v).trim().slice(0, 16);
   }
   return out;
 }
