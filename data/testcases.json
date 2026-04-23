@@ -7,11 +7,12 @@
       "name": "Undefined",
       "parentId": null,
       "order": -1,
-      "createdAt": "2026-04-23T06:41:24.306Z"
+      "createdAt": "2026-04-20T00:00:00Z"
     },
     {
       "id": "sec-002",
       "name": "Projects & Buildings",
+      "parentId": null,
       "order": 1,
       "createdAt": "2026-04-20T09:00:00Z",
       "parentId": null
@@ -19,6 +20,7 @@
     {
       "id": "sec-003",
       "name": "Proposal",
+      "parentId": null,
       "order": 2,
       "createdAt": "2026-04-22T21:04:41.282Z",
       "parentId": null

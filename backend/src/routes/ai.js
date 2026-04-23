@@ -3,6 +3,7 @@ import { fetchIssue } from "../services/jira.js";
 import {
   draftTestCaseFromIssue,
   draftTestCaseFromIssues,
+  draftDocSectionFromSource,
   isAiConfigured,
 } from "../services/ai.js";
 import { requireApiKey } from "../middleware/auth.js";
@@ -71,6 +72,36 @@ router.post("/generate-from-tickets", requireApiKey, async (req, res, next) => {
     }
     const draft = await draftTestCaseFromIssues(issues);
     res.json({ issues, draft });
+  } catch (e) {
+    next(e);
+  }
+});
+
+/**
+ * POST /api/ai/generate-doc-section
+ * Body: { url?: string, text?: string, hint?: string }
+ *
+ * Fetches the source URL (or uses the raw pasted `text`), asks Gemini to
+ * produce an HTML draft of a documentation section, and returns
+ * `{ draft: { title, content } }`. The caller is responsible for creating
+ * the actual section via POST /api/docs/sections with `isDraft: true`.
+ */
+router.post("/generate-doc-section", requireApiKey, async (req, res, next) => {
+  try {
+    const url = String(req.body?.url || "").trim();
+    const text = String(req.body?.text || "").trim();
+    const hint = String(req.body?.hint || "").trim();
+    if (!url && !text) {
+      return res
+        .status(400)
+        .json({ error: "Provide a source URL or pasted text." });
+    }
+    const draft = await draftDocSectionFromSource({
+      sourceUrl: url,
+      sourceText: text,
+      hint,
+    });
+    res.json({ draft });
   } catch (e) {
     next(e);
   }
