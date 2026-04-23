@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-04-23T17:57:07.519Z",
+  "updatedAt": "2026-04-23T21:39:13.067Z",
   "sections": [
     {
       "id": "doc-001",
@@ -43,15 +43,6 @@
       "createdAt": "2026-04-23T17:33:13.077Z",
       "updatedAt": "2026-04-23T17:43:37.188Z",
       "icon": "🧩"
-    },
-    {
-      "id": "doc-006",
-      "name": "Testing Portfolio Manager Settings Dialog Scroll",
-      "order": 0,
-      "parentId": "doc-005",
-      "isDraft": true,
-      "createdAt": "2026-04-23T17:57:07.519Z",
-      "updatedAt": "2026-04-23T17:57:07.519Z"
     }
   ]
 }
