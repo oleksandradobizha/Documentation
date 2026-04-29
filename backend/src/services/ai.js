@@ -225,6 +225,7 @@ function normalizeDraft(raw) {
 function extractJson(text) {
   if (typeof text !== "string") return null;
   const trimmed = text.trim();
+  if (!trimmed) return null;
   try {
     return JSON.parse(trimmed);
   } catch {
@@ -236,6 +237,51 @@ function extractJson(text) {
       return null;
     }
   }
+}
+
+/**
+ * Pull the text response + diagnostic metadata out of a Gemini
+ * `generateContent` reply. Gemini 2.5 Flash can return an empty `parts`
+ * array with finishReason `MAX_TOKENS` when the thinking budget + response
+ * exceeds `maxOutputTokens`, which used to surface here as a generic
+ * "could not be parsed as JSON" error. We now keep the finish reason so
+ * the caller can give the user a useful hint.
+ */
+function extractGeminiText(data) {
+  const candidate = data?.candidates?.[0];
+  const finishReason = candidate?.finishReason || "";
+  const text =
+    candidate?.content?.parts
+      ?.filter((p) => typeof p?.text === "string")
+      .map((p) => p.text)
+      .join("\n") || "";
+  const blockReason =
+    data?.promptFeedback?.blockReason || candidate?.safetyRatings?.length
+      ? data?.promptFeedback?.blockReason || ""
+      : "";
+  return { text, finishReason, blockReason };
+}
+
+function aiFriendlyParseError(label, { text, finishReason, blockReason }) {
+  console.warn(
+    `[ai] ${label} response was not valid JSON. finishReason=${
+      finishReason || "(none)"
+    } blockReason=${blockReason || "(none)"} textLen=${text.length} preview=${JSON.stringify(
+      text.slice(0, 300)
+    )}`
+  );
+  if (finishReason === "MAX_TOKENS") {
+    return "AI response was truncated before it finished. Try again — if it keeps happening, the ticket description may be too long.";
+  }
+  if (finishReason === "SAFETY" || blockReason) {
+    return `AI response was blocked by safety filters (${
+      blockReason || finishReason
+    }). Edit the ticket and try again.`;
+  }
+  if (!text) {
+    return "AI returned an empty response. Try again in a few seconds.";
+  }
+  return "AI response could not be parsed as JSON. Try again.";
 }
 
 /**
@@ -277,9 +323,15 @@ export async function draftTestCaseFromIssues(issues) {
       ],
       generationConfig: {
         temperature: 0.2,
-        maxOutputTokens: 1536,
+        // Gemini 2.5 Flash counts "thinking" tokens against this budget, so
+        // 1536 frequently truncates the JSON response. 4096 leaves plenty of
+        // room even for long test cases.
+        maxOutputTokens: 4096,
         responseMimeType: "application/json",
         responseSchema: RESPONSE_SCHEMA,
+        // Turn off hidden reasoning so output tokens are spent on the JSON
+        // we actually need. Harmless on models that ignore the field.
+        thinkingConfig: { thinkingBudget: 0 },
       },
     }),
   });
@@ -316,18 +368,11 @@ export async function draftTestCaseFromIssues(issues) {
   }
 
   const data = await res.json();
-  const text =
-    data?.candidates?.[0]?.content?.parts
-      ?.filter((p) => typeof p?.text === "string")
-      .map((p) => p.text)
-      .join("\n") || "";
+  const meta = extractGeminiText(data);
 
-  const parsed = extractJson(text);
+  const parsed = extractJson(meta.text);
   if (!parsed) {
-    throw httpError(
-      502,
-      "AI response could not be parsed as JSON. Try again."
-    );
+    throw httpError(502, aiFriendlyParseError("test case", meta));
   }
   return normalizeDraft(parsed);
 }
@@ -547,6 +592,7 @@ export async function draftDocSectionFromSource({
         maxOutputTokens: 4096,
         responseMimeType: "application/json",
         responseSchema: DOC_RESPONSE_SCHEMA,
+        thinkingConfig: { thinkingBudget: 0 },
       },
     }),
   });
@@ -582,18 +628,11 @@ export async function draftDocSectionFromSource({
   }
 
   const data = await res.json();
-  const responseText =
-    data?.candidates?.[0]?.content?.parts
-      ?.filter((p) => typeof p?.text === "string")
-      .map((p) => p.text)
-      .join("\n") || "";
+  const meta = extractGeminiText(data);
 
-  const parsed = extractJson(responseText);
+  const parsed = extractJson(meta.text);
   if (!parsed) {
-    throw httpError(
-      502,
-      "AI response could not be parsed as JSON. Try again."
-    );
+    throw httpError(502, aiFriendlyParseError("doc section", meta));
   }
 
   const fallbackTitle = rawUrl
@@ -705,6 +744,7 @@ export async function draftHowToFromIssues(issues) {
         maxOutputTokens: 4096,
         responseMimeType: "application/json",
         responseSchema: HOWTO_RESPONSE_SCHEMA,
+        thinkingConfig: { thinkingBudget: 0 },
       },
     }),
   });
@@ -740,18 +780,11 @@ export async function draftHowToFromIssues(issues) {
   }
 
   const data = await res.json();
-  const responseText =
-    data?.candidates?.[0]?.content?.parts
-      ?.filter((p) => typeof p?.text === "string")
-      .map((p) => p.text)
-      .join("\n") || "";
+  const meta = extractGeminiText(data);
 
-  const parsed = extractJson(responseText);
+  const parsed = extractJson(meta.text);
   if (!parsed) {
-    throw httpError(
-      502,
-      "AI response could not be parsed as JSON. Try again."
-    );
+    throw httpError(502, aiFriendlyParseError("how-to", meta));
   }
 
   const keysFallback = list
